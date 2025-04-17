@@ -1,0 +1,11 @@
+# 信用卡审批系统的依赖包
+numpy==1.24.3
+pandas==2.0.2
+scikit-learn==1.2.2
+matplotlib==3.7.1
+seaborn==0.12.2
+flask==2.3.2
+joblib==1.2.0
+shap==0.41.0
+gunicorn==21.2.0
+pytest==7.3.1
