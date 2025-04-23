@@ -12,8 +12,13 @@ import requests
 from io import StringIO
 import matplotlib.pyplot as plt
 import seaborn as sns
+import matplotlib
 
-def download_credit_card_data(save_path='data/'):
+# 设置matplotlib显示中文
+matplotlib.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'Microsoft YaHei', 'sans-serif']
+matplotlib.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
+
+def download_credit_card_data(save_path='machine-learning/credit-card-approval/data/'):
     """
     从UCI机器学习存储库下载信用卡审批数据集
     
@@ -61,16 +66,20 @@ def download_credit_card_data(save_path='data/'):
         print(f"下载数据时发生错误: {e}")
         return None
 
-def analyze_data(data):
+def analyze_data(data, save_path='machine-learning/credit-card-approval/data/'):
     """
     对数据集进行基本分析
     
     参数:
     data (pandas.DataFrame): 要分析的数据集
+    save_path (str): 保存图表的路径
     """
     if data is None:
         print("没有数据可供分析")
         return
+    
+    # 确保保存路径存在
+    os.makedirs(save_path, exist_ok=True)
     
     print("\n数据基本分析:")
     print(f"数据集形状: {data.shape}")
@@ -101,8 +110,8 @@ def analyze_data(data):
     plt.title('信用卡申请批准/拒绝分布')
     plt.xlabel('申请结果 (1=批准, 0=拒绝)')
     plt.ylabel('数量')
-    plt.save***REMOVED***g('data/target_distribution.png')
-    print("目标变量分布图已保存到 data/target_distribution.png")
+    plt.save***REMOVED***g(os.path.join(save_path, 'target_distribution.png'), dpi=300)
+    print(f"目标变量分布图已保存到 {os.path.join(save_path, 'target_distribution.png')}")
     
     # 检查数值特征的分布
     numeric_columns = data.select_dtypes(include=[np.number]).columns.tolist()
@@ -119,8 +128,8 @@ def analyze_data(data):
             sns.histplot(data[col].dropna(), kde=True)
             plt.title(f'特征 {col} 分布')
         plt.tight_layout()
-        plt.save***REMOVED***g('data/numeric_features_distribution.png')
-        print("数值特征分布图已保存到 data/numeric_features_distribution.png")
+        plt.save***REMOVED***g(os.path.join(save_path, 'numeric_features_distribution.png'), dpi=300)
+        print(f"数值特征分布图已保存到 {os.path.join(save_path, 'numeric_features_distribution.png')}")
     
     # 检查分类特征的分布
     categorical_columns = data.select_dtypes(include=['object']).columns.tolist()
@@ -141,8 +150,8 @@ def analyze_data(data):
             plt.title(f'特征 {col} 分布')
             plt.xticks(rotation=45)
         plt.tight_layout()
-        plt.save***REMOVED***g('data/categorical_features_distribution.png')
-        print("分类特征分布图已保存到 data/categorical_features_distribution.png")
+        plt.save***REMOVED***g(os.path.join(save_path, 'categorical_features_distribution.png'), dpi=300)
+        print(f"分类特征分布图已保存到 {os.path.join(save_path, 'categorical_features_distribution.png')}")
 
 def main():
     """主函数"""
