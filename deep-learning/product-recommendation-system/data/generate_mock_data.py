@@ -192,7 +192,6 @@ def generate_and_save_data(output_dir='./'):
     train_df, test_df = train_test_split(
         ratings_df, 
         test_size=DATA_CONFIG['test_size'],
-        stratify=ratings_df['user_id'],
         random_state=DATA_CONFIG['random_seed']
     )
     
@@ -211,5 +210,6 @@ def generate_and_save_data(output_dir='./'):
 
 
 if __name__ == "__main__":
-    # 默认保存到当前目录
-    generate_and_save_data() 
+    # 保存到脚本所在目录
+    script_dir = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+    generate_and_save_data(script_dir) 
