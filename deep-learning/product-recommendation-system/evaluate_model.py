@@ -14,6 +14,11 @@ from utils.data_utils import load_data, split_data, create_data_loaders
 from utils.metrics import evaluate_recommender
 from con***REMOVED***g import MODEL_CONFIG, MISC_CONFIG, DATA_CONFIG
 
+# 获取当前文件所在目录
+CURRENT_DIR = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+# 设置数据目录路径
+DATA_DIR = os.path.join(CURRENT_DIR, 'data')
+
 
 def generate_predictions(model, device, user_item_pairs):
     """
@@ -122,20 +127,33 @@ def plot_results(metrics, pred_df, test_df):
         pred_df (pd.DataFrame): 预测数据
         test_df (pd.DataFrame): 测试数据
     """
-    # 创建图表目录
-    plots_dir = './models/plots'
+    # 创建图表目录，使用data目录
+    plots_dir = DATA_DIR
     os.makedirs(plots_dir, exist_ok=True)
+    
+    # 设置中文字体支持
+    try:
+        # 对于MacOS
+        plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'Microsoft YaHei']
+        # 对于Linux和Windows
+        if not any([font in plt.matplotlib.font_manager.***REMOVED***ndSystemFonts() for font in ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']]):
+            raise ValueError("No suitable Chinese font found")
+        plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像时负号'-'显示为方块的问题
+        use_chinese = True
+    except:
+        # 如果无法找到中文字体，使用英文标签
+        use_chinese = False
     
     # 创建一个3x2的图表布局
     ***REMOVED***g, axes = plt.subplots(2, 2, ***REMOVED***gsize=(16, 12))
     
     # 1. 评分分布图
     ax1 = axes[0, 0]
-    ax1.hist(test_df['rating'], bins=10, alpha=0.5, label='真实评分')
-    ax1.hist(pred_df['score'], bins=10, alpha=0.5, label='预测评分')
-    ax1.set_title('评分分布对比')
-    ax1.set_xlabel('评分值')
-    ax1.set_ylabel('频次')
+    ax1.hist(test_df['rating'], bins=10, alpha=0.5, label='True Ratings' if not use_chinese else '真实评分')
+    ax1.hist(pred_df['score'], bins=10, alpha=0.5, label='Predicted Ratings' if not use_chinese else '预测评分')
+    ax1.set_title('Rating Distribution Comparison' if not use_chinese else '评分分布对比')
+    ax1.set_xlabel('Rating Value' if not use_chinese else '评分值')
+    ax1.set_ylabel('Frequency' if not use_chinese else '频次')
     ax1.legend()
     ax1.grid(True, linestyle='--', alpha=0.7)
     
@@ -148,9 +166,9 @@ def plot_results(metrics, pred_df, test_df):
     min_val = min(merged_df['rating'].min(), merged_df['score'].min()) - 0.5
     max_val = max(merged_df['rating'].max(), merged_df['score'].max()) + 0.5
     ax2.plot([min_val, max_val], [min_val, max_val], 'r--')
-    ax2.set_title('真实评分 vs 预测评分')
-    ax2.set_xlabel('真实评分')
-    ax2.set_ylabel('预测评分')
+    ax2.set_title('True vs Predicted Ratings' if not use_chinese else '真实评分 vs 预测评分')
+    ax2.set_xlabel('True Rating' if not use_chinese else '真实评分')
+    ax2.set_ylabel('Predicted Rating' if not use_chinese else '预测评分')
     ax2.grid(True, linestyle='--', alpha=0.7)
     
     # 3. 每个用户的平均评分
@@ -162,21 +180,21 @@ def plot_results(metrics, pred_df, test_df):
     min_val = min(merged_user_avg['rating'].min(), merged_user_avg['score'].min()) - 0.5
     max_val = max(merged_user_avg['rating'].max(), merged_user_avg['score'].max()) + 0.5
     ax3.plot([min_val, max_val], [min_val, max_val], 'r--')
-    ax3.set_title('用户平均评分对比')
-    ax3.set_xlabel('用户真实平均评分')
-    ax3.set_ylabel('用户预测平均评分')
+    ax3.set_title('User Average Rating Comparison' if not use_chinese else '用户平均评分对比')
+    ax3.set_xlabel('User Average True Rating' if not use_chinese else '用户真实平均评分')
+    ax3.set_ylabel('User Average Predicted Rating' if not use_chinese else '用户预测平均评分')
     ax3.grid(True, linestyle='--', alpha=0.7)
     
     # 4. 性能指标条形图
     ax4 = axes[1, 1]
     metrics_to_plot = {k: v for k, v in metrics.items() if k != 'rmse' and k != 'mae'}
     ax4.bar(metrics_to_plot.keys(), metrics_to_plot.values())
-    ax4.set_title('性能指标')
-    ax4.set_ylabel('指标值')
+    ax4.set_title('Performance Metrics' if not use_chinese else '性能指标')
+    ax4.set_ylabel('Metric Value' if not use_chinese else '指标值')
     ax4.grid(True, linestyle='--', alpha=0.7, axis='y')
     
     # 设置主标题
-    plt.suptitle('推荐系统模型评估结果', fontsize=16)
+    plt.suptitle('Recommendation System Model Evaluation Results' if not use_chinese else '推荐系统模型评估结果', fontsize=16)
     plt.tight_layout(rect=[0, 0, 1, 0.97])
     
     # 保存图表
