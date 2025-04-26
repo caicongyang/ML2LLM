@@ -224,8 +224,10 @@ def main():
             args.target_modules = ["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
         elif "mistral" in args.model_name_or_path.lower():
             args.target_modules = ["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+        elif "qwen" in args.model_name_or_path.lower() or "qwen2" in args.model_name_or_path.lower():
+            args.target_modules = ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
         elif "gpt-neox" in args.model_name_or_path.lower():
-            args.target_modules = ["query_key_value", "xxx", "dense_h_to_4h", "dense_4h_to_h"]
+            args.target_modules = ["query_key_value", "dense_h_to_4h", "dense_4h_to_h"]
         elif "falcon" in args.model_name_or_path.lower():
             args.target_modules = ["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"]
         else:
