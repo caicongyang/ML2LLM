@@ -11,7 +11,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #定义训练的轮次
 EPOCH= 30000
 
-token = BertTokenizer.from_pretrained(r"/Users/caicongyang/IdeaProjects/tom/ML2LLM/LLM/bert/model/bert-base-chinese/models--bert-base-chinese/snapshots/c30a6ed22ab4564dc1e3b2ecbf6e766b0611a33f")
+token = BertTokenizer.from_pretrained(r"bert-base-chinese")
 
 def collate_fn(data):
     sents = [i[0]for i in data]

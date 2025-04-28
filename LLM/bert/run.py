@@ -6,7 +6,7 @@ from transformers import BertTokenizer
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(DEVICE)
 
-token = BertTokenizer.from_pretrained(r"/Users/caicongyang/IdeaProjects/tom/ML2LLM/LLM/bert/model/bert-base-chinese/models--bert-base-chinese/snapshots/c30a6ed22ab4564dc1e3b2ecbf6e766b0611a33f")
+token = BertTokenizer.from_pretrained(r"bert-base-chinese")
 names = ["负向评价","正向评价"]
 model = Model().to(DEVICE)
 
