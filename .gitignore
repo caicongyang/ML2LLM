@@ -178,3 +178,5 @@ deep-learning/auto-vision/data
 
 
 
+.DS_Store
+*.DS_Store
