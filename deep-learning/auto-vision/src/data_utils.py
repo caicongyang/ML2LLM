@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader, Subset, random_split
 from torchvision import datasets, transforms
 
 
-def load_cifar10(data_dir='./data', val_size=0.1, apply_augmentation=True):
+def load_cifar10(data_dir=None, val_size=0.1, apply_augmentation=True):
     """
     加载CIFAR-10数据集，并分割为训练集、验证集和测试集
     
@@ -25,6 +25,11 @@ def load_cifar10(data_dir='./data', val_size=0.1, apply_augmentation=True):
     Returns:
         tuple: (train_dataset, val_dataset, test_dataset, class_names)
     """
+    # 如果未指定数据目录，则使用auto-vision/data
+    if data_dir is None:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+        data_dir = os.path.join(base_dir, 'data')
+    
     # 确保数据目录存在
     os.makedirs(data_dir, exist_ok=True)
     
@@ -189,7 +194,12 @@ def create_noisy_data(data, noise_factor=0.2):
 if __name__ == "__main__":
     # 测试数据加载功能
     print("测试数据加载功能...")
-    train_dataset, val_dataset, test_dataset, class_names = load_cifar10()
+    
+    # 获取默认的数据目录
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+    data_dir = os.path.join(base_dir, 'data')
+    
+    train_dataset, val_dataset, test_dataset, class_names = load_cifar10(data_dir=data_dir)
     
     # 创建数据加载器
     train_loader, val_loader, test_loader = get_data_loaders(

@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader, random_split
 from torchvision import datasets, transforms
 
 
-def get_cifar10_datasets(data_dir='./data', val_split=0.2, augment=True):
+def get_cifar10_datasets(data_dir=None, val_split=0.2, augment=True):
     """
     获取CIFAR10数据集
     
@@ -24,6 +24,11 @@ def get_cifar10_datasets(data_dir='./data', val_split=0.2, augment=True):
     Returns:
         tuple: (训练集, 验证集, 测试集)
     """
+    # 如果未指定数据目录，则使用auto-vision/data
+    if data_dir is None:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+        data_dir = os.path.join(base_dir, 'data')
+    
     # 确保数据目录存在
     os.makedirs(data_dir, exist_ok=True)
     
@@ -140,7 +145,7 @@ def get_dataset_info():
     }
 
 
-def get_cifar10_loaders(batch_size=128, augment=True, val_split=0.2, num_workers=4, data_dir='./data'):
+def get_cifar10_loaders(batch_size=128, augment=True, val_split=0.2, num_workers=4, data_dir=None):
     """
     便捷函数：一站式获取CIFAR10数据加载器
     
@@ -154,6 +159,11 @@ def get_cifar10_loaders(batch_size=128, augment=True, val_split=0.2, num_workers
     Returns:
         tuple: (训练加载器, 验证加载器, 测试加载器)
     """
+    # 如果未指定数据目录，则使用auto-vision/data
+    if data_dir is None:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+        data_dir = os.path.join(base_dir, 'data')
+    
     # 获取数据集
     train_set, val_set, test_set = get_cifar10_datasets(
         data_dir=data_dir,
@@ -183,8 +193,12 @@ if __name__ == "__main__":
     print(f"输入尺寸: {dataset_info['input_size']}")
     print(f"类别列表: {dataset_info['classes']}")
     
+    # 获取默认的数据目录
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+    data_dir = os.path.join(base_dir, 'data')
+    
     # 加载数据集
-    train_loader, val_loader, test_loader = get_cifar10_loaders(batch_size=64, num_workers=2)
+    train_loader, val_loader, test_loader = get_cifar10_loaders(batch_size=64, num_workers=2, data_dir=data_dir)
     
     # 打印数据集大小
     print(f"训练集批次数量: {len(train_loader)}")
