@@ -1,11 +1,16 @@
 #自定义数据集
 from torch.utils.data import Dataset
 from datasets import load_from_disk
+import os
 
 class MyDataset(Dataset):
     def __init__(self,split):
+        #获取当前文件所在目录
+        current_dir = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+        #使用相对路径加载数据
+        data_path = os.path.join(current_dir, "data/ChnSentiCorp")
         #从磁盘加载数据
-        self.dataset = load_from_disk(r"/Users/caicongyang/IdeaProjects/tom/ML2LLM/LLM/bert/data/ChnSentiCorp")
+        self.dataset = load_from_disk(data_path)
         if split == 'train':
             self.dataset = self.dataset["train"]
         elif split == "test":

@@ -5,8 +5,8 @@ import torch
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(DEVICE)
 
-#加载预训练模型
-pretrained = BertModel.from_pretrained(r"/Users/caicongyang/IdeaProjects/tom/ML2LLM/LLM/bert/model/bert-base-chinese/models--bert-base-chinese/snapshots/c30a6ed22ab4564dc1e3b2ecbf6e766b0611a33f").to(DEVICE)
+#加载预训练模型 - 直接从Hugging Face下载
+pretrained = BertModel.from_pretrained("bert-base-chinese").to(DEVICE)
 print(pretrained)
 #定义下游任务（增量模型）
 class Model(torch.nn.Module):

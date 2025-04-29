@@ -2,13 +2,14 @@
 import torch  # PyTorch深度学习框架
 from net import Model  # 导入自定义的模型结构
 from transformers import BertTokenizer  # 导入BERT分词器
+import os  # 导入os模块，用于处理文件路径
 
 # 设置运行设备，优先使用GPU，如果没有则使用CPU
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(DEVICE)  # 打印当前使用的设备信息
 
 # 初始化BERT分词器，使用预训练的中文BERT模型
-token = BertTokenizer.from_pretrained(r"bert-base-chinese")
+token = BertTokenizer.from_pretrained("bert-base-chinese")
 
 # 定义输出标签的映射关系
 names = ["负向评价", "正向评价"]  # 索引0表示负向，1表示正向
@@ -50,9 +51,11 @@ def test():
     """
     模型测试函数：进行交互式的文本情感预测
     """
-    # 加载训练好的模型参数
-    model.load_state_dict(torch.load("/Users/caicongyang/IdeaProjects/tom/ML2LLM/LLM/bert/params/1_bert.pth", 
-                                   map_location=DEVICE))
+    # 获取当前文件所在目录
+    current_dir = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+    # 加载训练好的模型参数，使用相对路径
+    model_path = os.path.join(current_dir, "params/1_bert.pth")
+    model.load_state_dict(torch.load(model_path, map_location=DEVICE))
     
     # 将模型设置为评估模式（关闭dropout等训练特定操作）
     model.eval()
