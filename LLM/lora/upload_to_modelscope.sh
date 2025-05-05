@@ -5,13 +5,29 @@
 
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***
+***REMOVED***
 MODEL_NAME="DeepSeek-R1-Distill-Qwen-1.5B-risk"  # 模型名称
-ACCESS_TOKEN="904e25b9-f756-4055-87e6-3e03b36c585d"  # 您的魔塔社区 API 令牌
 USERNAME="caicongyang"  # 您的魔塔社区用户名
 CHINESE_NAME="DeepSeek-R1精炼风险模型"  # 模型的中文名称，可选
 
-# 您可以从 https://modelscope.cn/my/myaccesstoken 获取令牌
-# 或者使用环境变量: ACCESS_TOKEN=$MODELSCOPE_TOKEN
+***REMOVED***
+if [ -z "$MS_TOKEN" ]; then
+    echo "警告: 未找到MS_TOKEN环境变量。请确保在.env文件中设置或直接输入。"
+    read -p "请输入您的ModelScope API令牌: " MS_TOKEN
+    if [ -z "$MS_TOKEN" ]; then
+        echo "错误: 必须提供ModelScope API令牌才能上传模型。"
+        echo "您可以从 https://modelscope.cn/my/myaccesstoken 获取令牌"
+***REMOVED***
+    ***REMOVED***
+***REMOVED***
 
 # 其他可选参数
 MODEL_TYPE="nlp/text-generation"  # 模型类型和任务，格式为'类型/任务'
@@ -74,7 +90,7 @@ echo "开始上传..."
 cmd="python \"$SCRIPT_PATH\" \
   --model_path \"$MODEL_PATH\" \
   --model_name \"$MODEL_NAME\" \
-  --access_token \"$ACCESS_TOKEN\" \
+  --access_token \"$MS_TOKEN\" \
   --username \"$USERNAME\" \
   --model_type \"$MODEL_TYPE\" \
   --license \"$LICENSE\" \
