@@ -37,7 +37,7 @@ def plot_training_history(history, save_path=None):
         save_path: 保存路径，若为None则显示图像而不保存
     """
     # 创建一个新的图形，设置宽度为15英寸，高度为5英寸，用于容纳多个子图
-    plt.***REMOVED***gure(***REMOVED***gsize=(15, 5))
+    plt.figure(figsize=(15, 5))
     
     # 创建第一个子图（1行2列布局的第1个）用于绘制损失曲线
     plt.subplot(1, 2, 1)
@@ -80,7 +80,7 @@ def plot_training_history(history, save_path=None):
         # 自动调整子图之间的间距，使布局更紧凑美观
         plt.tight_layout()
         # 将图像保存到指定路径
-        plt.save***REMOVED***g(save_path)
+        plt.savefig(save_path)
         # 关闭当前图形，释放内存
         plt.close()
         # 打印保存成功的消息
@@ -142,7 +142,7 @@ def visualize_predictions(model, data_loader, class_names, device, num_samples=1
             pred_labels.extend(preds.cpu().numpy()[:samples_to_take])
     
     # 创建大小为15x12英寸的图形，用于展示多个图像及其预测结果
-    plt.***REMOVED***gure(***REMOVED***gsize=(15, 12))
+    plt.figure(figsize=(15, 12))
     # 遍历收集的样本数据
     for i, (image, true_label, pred_label) in enumerate(zip(images, true_labels, pred_labels)):
         # 如果达到指定的样本数量，则停止循环
@@ -174,7 +174,7 @@ def visualize_predictions(model, data_loader, class_names, device, num_samples=1
         # 自动调整子图间距
         plt.tight_layout()
         # 将图像保存到指定路径
-        plt.save***REMOVED***g(save_path)
+        plt.savefig(save_path)
         # 关闭当前图形，释放内存
         plt.close()
         # 打印保存成功的消息
@@ -273,15 +273,15 @@ def visualize_features(model, data_loader, device, method='tsne', save_path=None
         # 如果使用t-SNE方法，打印相关信息
         print("使用t-SNE进行降维...")
         # 使用t-SNE算法将高维特征降至2维，设置随机种子确保结果可复现
-        embedding = TSNE(n_components=2, random_state=42).***REMOVED***t_transform(features)
+        embedding = TSNE(n_components=2, random_state=42).fit_transform(features)
     else:  # pca
         # 如果使用PCA方法，打印相关信息
         print("使用PCA进行降维...")
         # 使用PCA算法将高维特征降至2维，设置随机种子确保结果可复现
-        embedding = PCA(n_components=2, random_state=42).***REMOVED***t_transform(features)
+        embedding = PCA(n_components=2, random_state=42).fit_transform(features)
     
     # 创建一个新的图形，大小为10x8英寸
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+    plt.figure(figsize=(10, 8))
     # 使用散点图可视化降维后的特征，点的颜色根据类别标签着色
     scatter = plt.scatter(embedding[:, 0], embedding[:, 1], c=labels, cmap='viridis', alpha=0.5)
     # 添加颜色条，标明不同颜色对应的类别
@@ -298,7 +298,7 @@ def visualize_features(model, data_loader, device, method='tsne', save_path=None
         # 自动调整图表布局
         plt.tight_layout()
         # 将图像保存到指定路径
-        plt.save***REMOVED***g(save_path)
+        plt.savefig(save_path)
         # 关闭当前图形，释放内存
         plt.close()
         # 打印保存成功的消息
@@ -347,7 +347,7 @@ def visualize_attention(model, data_loader, device, class_names, save_dir=None):
     orig_images = inputs.cpu().numpy()
     
     # 创建一个大尺寸的图形，用于并排显示原始图像和注意力图
-    plt.***REMOVED***gure(***REMOVED***gsize=(20, 12))
+    plt.figure(figsize=(20, 12))
     
     # 在不计算梯度的情况下获取中间层特征和注意力
     with torch.no_grad():
@@ -428,7 +428,7 @@ def visualize_attention(model, data_loader, device, class_names, save_dir=None):
         # 自动调整子图布局
         plt.tight_layout()
         # 将图像保存到指定目录下的文件中
-        plt.save***REMOVED***g(os.path.join(save_dir, 'attention_visualization.png'))
+        plt.savefig(os.path.join(save_dir, 'attention_visualization.png'))
         # 关闭当前图形，释放内存
         plt.close()
         # 打印保存成功的消息
@@ -482,7 +482,7 @@ def visualize_autoencoder_results(model, data_loader, device, save_dir=None, num
     reconstruction_errors = F.mse_loss(reconstructed, inputs, reduction='none').mean([1, 2, 3]).cpu().numpy()
     
     # 创建一个大尺寸的图形，用于并排显示原始图像和重建图像
-    plt.***REMOVED***gure(***REMOVED***gsize=(20, 4))
+    plt.figure(figsize=(20, 4))
     
     # 遍历每个样本，绘制原始图像和对应的重建图像
     for i in range(num_samples):
@@ -521,7 +521,7 @@ def visualize_autoencoder_results(model, data_loader, device, save_dir=None, num
         # 自动调整子图布局
         plt.tight_layout()
         # 将图像保存到指定目录下的文件中
-        plt.save***REMOVED***g(os.path.join(save_dir, 'reconstruction_results.png'))
+        plt.savefig(os.path.join(save_dir, 'reconstruction_results.png'))
         # 关闭当前图形，释放内存
         plt.close()
         # 打印保存成功的消息
@@ -562,10 +562,10 @@ def visualize_autoencoder_results(model, data_loader, device, save_dir=None, num
             # 打印提示信息
             print(f"潜在空间维度为 {latent_vectors.shape[1]}，使用t-SNE降维...")
             # 使用t-SNE将潜在向量降至2维
-            latent_vectors = TSNE(n_components=2, random_state=42).***REMOVED***t_transform(latent_vectors)
+            latent_vectors = TSNE(n_components=2, random_state=42).fit_transform(latent_vectors)
         
         # 创建一个新的图形，用于可视化潜在空间分布
-        plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+        plt.figure(figsize=(10, 8))
         # 使用散点图可视化潜在空间，点的颜色根据类别标签着色
         scatter = plt.scatter(latent_vectors[:, 0], latent_vectors[:, 1], c=labels, cmap='viridis', alpha=0.5)
         # 添加颜色条，标明不同颜色对应的类别
@@ -582,7 +582,7 @@ def visualize_autoencoder_results(model, data_loader, device, save_dir=None, num
             # 自动调整图表布局
             plt.tight_layout()
             # 将图像保存到指定目录下的文件中
-            plt.save***REMOVED***g(os.path.join(save_dir, 'latent_space.png'))
+            plt.savefig(os.path.join(save_dir, 'latent_space.png'))
             # 关闭当前图形，释放内存
             plt.close()
             # 打印保存成功的消息

@@ -165,7 +165,7 @@ def evaluate_anomaly_detection(reconstruction_errors, true_labels, save_dir=None
     f1_score = 2 * precision_score * recall_score / (precision_score + recall_score) if (precision_score + recall_score) > 0 else 0
     
     # 绘制ROC曲线
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+    plt.figure(figsize=(10, 8))
     plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC 曲线 (AUC = {roc_auc:.3f})')
     plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
     plt.xlim([0.0, 1.0])
@@ -176,11 +176,11 @@ def evaluate_anomaly_detection(reconstruction_errors, true_labels, save_dir=None
     plt.legend(loc="lower right")
     
     if save_dir:
-        plt.save***REMOVED***g(os.path.join(save_dir, 'roc_curve.png'))
+        plt.savefig(os.path.join(save_dir, 'roc_curve.png'))
     plt.close()
     
     # 绘制PR曲线
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+    plt.figure(figsize=(10, 8))
     plt.plot(recall, precision, color='blue', lw=2, label=f'PR 曲线 (AUC = {pr_auc:.3f})')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
@@ -190,11 +190,11 @@ def evaluate_anomaly_detection(reconstruction_errors, true_labels, save_dir=None
     plt.legend(loc="lower left")
     
     if save_dir:
-        plt.save***REMOVED***g(os.path.join(save_dir, 'pr_curve.png'))
+        plt.savefig(os.path.join(save_dir, 'pr_curve.png'))
     plt.close()
     
     # 绘制重构误差分布
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+    plt.figure(figsize=(12, 8))
     plt.hist(reconstruction_errors[true_labels == 0], bins=50, alpha=0.5, label='正常样本')
     plt.hist(reconstruction_errors[true_labels == 1], bins=50, alpha=0.5, label='异常样本')
     plt.axvline(x=optimal_threshold, color='r', linestyle='--', label=f'阈值 = {optimal_threshold:.3f}')
@@ -204,7 +204,7 @@ def evaluate_anomaly_detection(reconstruction_errors, true_labels, save_dir=None
     plt.legend()
     
     if save_dir:
-        plt.save***REMOVED***g(os.path.join(save_dir, 'error_distribution.png'))
+        plt.savefig(os.path.join(save_dir, 'error_distribution.png'))
     plt.close()
     
     # 返回评估指标
@@ -232,7 +232,7 @@ def visualize_samples(original_images, reconstructed_images, errors, save_path=N
         save_path: 保存路径
     """
     n = min(10, len(original_images))
-    plt.***REMOVED***gure(***REMOVED***gsize=(20, 4))
+    plt.figure(figsize=(20, 4))
     
     for i in range(n):
         # 原始图像
@@ -256,7 +256,7 @@ def visualize_samples(original_images, reconstructed_images, errors, save_path=N
     plt.tight_layout()
     
     if save_path:
-        plt.save***REMOVED***g(save_path)
+        plt.savefig(save_path)
         plt.close()
     else:
         plt.show()

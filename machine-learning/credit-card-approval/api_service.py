@@ -27,7 +27,7 @@ import logging                             # 日志记录
 
 # 导入自定义模型推理模块
 # 首先添加父目录到系统路径，确保能找到模块
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from model_inference import (
     load_model,                  # 加载模型函数
     load_feature_transformers,   # 加载特征转换器函数
@@ -40,7 +40,7 @@ from model_inference import (
 
 # 配置日志记录
 # 设置日志级别为INFO，同时输出到文件和控制台
-logging.basicCon***REMOVED***g(
+logging.basicConfig(
     level=logging.INFO,                        # 设置日志级别为INFO
     format='%(asctime)s [%(levelname)s] %(message)s',  # 日志格式：时间 [级别] 消息
     handlers=[

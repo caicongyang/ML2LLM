@@ -1,7 +1,7 @@
-***REMOVED***
+#!/bin/bash
 
 # LLaMA-Factory LoRA微调示例脚本
-# 此脚本展示了如何使用llama_factory_***REMOVED***ne_tuning.py进行LoRA微调
+# 此脚本展示了如何使用llama_factory_fine_tuning.py进行LoRA微调
 
 # 首先安装LLaMA-Factory（如果尚未安装）
 echo "安装LLaMA-Factory依赖..."
@@ -11,7 +11,7 @@ echo ""
 
 # 示例1：基本的微调场景
 echo "示例1：基本的LoRA微调"
-echo "python llama_factory_***REMOVED***ne_tuning.py \
+echo "python llama_factory_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-7b-hf\" \
   --dataset_path \"path/to/your_data.json\" \
   --dataset_format \"alpaca\" \
@@ -25,7 +25,7 @@ echo "python llama_factory_***REMOVED***ne_tuning.py \
 
 # 示例2：使用4位量化训练大型模型（节省显存）
 echo -e "\n示例2：使用4位量化训练大型模型"
-echo "python llama_factory_***REMOVED***ne_tuning.py \
+echo "python llama_factory_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-13b-hf\" \
   --dataset_path \"path/to/your_data.json\" \
   --dataset_format \"alpaca\" \
@@ -39,7 +39,7 @@ echo "python llama_factory_***REMOVED***ne_tuning.py \
 
 # 示例3：使用ShareGPT对话格式数据集
 echo -e "\n示例3：使用ShareGPT对话格式数据集"
-echo "python llama_factory_***REMOVED***ne_tuning.py \
+echo "python llama_factory_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-7b-chat-hf\" \
   --dataset_path \"path/to/sharegpt_data.json\" \
   --dataset_format \"sharegpt\" \
@@ -53,7 +53,7 @@ echo "python llama_factory_***REMOVED***ne_tuning.py \
 
 # 示例4：指定不同的目标模块，并导出合并模型
 echo -e "\n示例4：指定不同的目标模块，并导出合并模型"
-echo "python llama_factory_***REMOVED***ne_tuning.py \
+echo "python llama_factory_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-7b-hf\" \
   --dataset_path \"path/to/your_data.json\" \
   --dataset_format \"alpaca\" \
@@ -65,7 +65,7 @@ echo "python llama_factory_***REMOVED***ne_tuning.py \
 
 # 示例5：使用Wandb跟踪训练过程
 echo -e "\n示例5：使用Wandb跟踪训练过程"
-echo "python llama_factory_***REMOVED***ne_tuning.py \
+echo "python llama_factory_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-7b-hf\" \
   --dataset_path \"path/to/your_data.json\" \
   --dataset_format \"alpaca\" \

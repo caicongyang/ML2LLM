@@ -1,10 +1,10 @@
 {
-  "_data_***REMOVED***les": [
+  "_data_files": [
     {
-      "***REMOVED***lename": "dataset.arrow"
+      "filename": "dataset.arrow"
     }
   ],
-  "_***REMOVED***ngerprint": "24c4fd9824d8b978",
+  "_fingerprint": "24c4fd9824d8b978",
   "_format_columns": null,
   "_format_kwargs": {},
   "_format_type": null,

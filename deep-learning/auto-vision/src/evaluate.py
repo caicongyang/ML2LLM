@@ -19,7 +19,7 @@ import torch.nn.functional as F
 # 从scikit-learn导入分类评估指标：准确率、精确率、召回率、F1分数
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 # 从scikit-learn导入混淆矩阵、分类报告、ROC曲线和AUC计算工具
-from sklearn.metrics import confusion_matrix, classi***REMOVED***cation_report, roc_curve, auc
+from sklearn.metrics import confusion_matrix, classification_report, roc_curve, auc
 # 导入Seaborn库，提供基于matplotlib的高级统计图形绘制
 import seaborn as sns
 # 导入进度条库，用于显示长时间运行任务的进度
@@ -33,7 +33,7 @@ from visualize import (
 )
 
 
-def evaluate_classi***REMOVED***er(model, test_loader, device):
+def evaluate_classifier(model, test_loader, device):
     """
     评估分类器模型
     
@@ -185,7 +185,7 @@ def plot_confusion_matrix(y_true, y_pred, class_names, save_path=None):
     cm = confusion_matrix(y_true, y_pred)
     
     # 创建一个新的图形，设置大小为10x8英寸
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+    plt.figure(figsize=(10, 8))
     # 使用Seaborn的heatmap函数绘制混淆矩阵的热力图
     # annot=True表示在单元格中显示数值
     # fmt='d'表示数值格式为整数
@@ -204,7 +204,7 @@ def plot_confusion_matrix(y_true, y_pred, class_names, save_path=None):
         # 自动调整子图布局，防止标签重叠
         plt.tight_layout()
         # 将图像保存到指定的路径
-        plt.save***REMOVED***g(save_path)
+        plt.savefig(save_path)
         # 关闭当前图形，释放内存
         plt.close()
         # 打印保存成功的消息
@@ -233,7 +233,7 @@ def plot_autoencoder_results(original_images, reconstructed_images, reconstructi
     # 获取要显示的样本数量，最多10个
     n = min(10, len(original_images))
     # 创建一个宽度为20英寸，高度为4英寸的图形，用于并排显示图像
-    plt.***REMOVED***gure(***REMOVED***gsize=(20, 4))
+    plt.figure(figsize=(20, 4))
     
     # 遍历要显示的样本
     for i in range(n):
@@ -263,7 +263,7 @@ def plot_autoencoder_results(original_images, reconstructed_images, reconstructi
         # 自动调整子图布局
         plt.tight_layout()
         # 将图像保存到指定目录下的文件中
-        plt.save***REMOVED***g(os.path.join(save_dir, 'reconstruction_comparison.png'))
+        plt.savefig(os.path.join(save_dir, 'reconstruction_comparison.png'))
         # 关闭当前图形
         plt.close()
         # 打印保存成功的消息
@@ -276,7 +276,7 @@ def plot_autoencoder_results(original_images, reconstructed_images, reconstructi
     
     # 绘制重建误差的分布直方图
     # 创建一个宽度为10英寸，高度为6英寸的图形
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     # 使用Seaborn的histplot函数绘制直方图，kde=True表示同时绘制核密度估计曲线
     sns.histplot(reconstruction_errors, kde=True)
     # 设置x轴标签
@@ -291,7 +291,7 @@ def plot_autoencoder_results(original_images, reconstructed_images, reconstructi
         # 自动调整子图布局
         plt.tight_layout()
         # 将图像保存到指定目录下的文件中
-        plt.save***REMOVED***g(os.path.join(save_dir, 'error_distribution.png'))
+        plt.savefig(os.path.join(save_dir, 'error_distribution.png'))
         # 关闭当前图形
         plt.close()
         # 打印保存成功的消息
@@ -303,7 +303,7 @@ def plot_autoencoder_results(original_images, reconstructed_images, reconstructi
         plt.show()
 
 
-def print_classi***REMOVED***cation_report(y_true, y_pred, class_names):
+def print_classification_report(y_true, y_pred, class_names):
     """
     打印分类报告
     
@@ -314,7 +314,7 @@ def print_classi***REMOVED***cation_report(y_true, y_pred, class_names):
     """
     # 使用scikit-learn生成分类报告，包含精确率、召回率、F1分数等指标
     # target_names指定类别名称，digits指定小数点后保留的位数
-    report = classi***REMOVED***cation_report(y_true, y_pred, target_names=class_names, digits=4)
+    report = classification_report(y_true, y_pred, target_names=class_names, digits=4)
     # 打印报告标题
     print("\n分类报告:")
     # 打印生成的分类报告
@@ -337,7 +337,7 @@ def get_evaluation_function(model_name):
         return evaluate_autoencoder
     else:
         # 对于其他所有模型（假定为分类器），返回分类器的评估函数
-        return evaluate_classi***REMOVED***er 
+        return evaluate_classifier 
 
 
 # 添加自定义的特征可视化函数
@@ -408,10 +408,10 @@ def visualize_model_features(model, data_loader, device, method='tsne', save_pat
                 hook.remove()  # 移除钩子
                 # 返回通过钩子获取的特征
                 return extracted_features
-            # 如果模型有classi***REMOVED***er属性且是Sequential类型（PyTorch常用结构）
-            elif hasattr(model, 'classi***REMOVED***er') and isinstance(model.classi***REMOVED***er, torch.nn.Sequential):
+            # 如果模型有classifier属性且是Sequential类型（PyTorch常用结构）
+            elif hasattr(model, 'classifier') and isinstance(model.classifier, torch.nn.Sequential):
                 # 获取Sequential中的最后一层
-                last_layer = model.classi***REMOVED***er[-1]
+                last_layer = model.classifier[-1]
                 # 在最后一层注册前向钩子
                 hook = last_layer.register_forward_hook(hook_fn)
                 # 运行模型的前向传播以触发钩子
@@ -476,16 +476,16 @@ def visualize_model_features(model, data_loader, device, method='tsne', save_pat
         # 如果使用t-SNE方法，打印相关信息
         print("使用t-SNE进行降维...")
         # 使用t-SNE算法将高维特征降至2维
-        embedding = TSNE(n_components=2, random_state=42).***REMOVED***t_transform(features)
+        embedding = TSNE(n_components=2, random_state=42).fit_transform(features)
     else:  # pca
         # 如果使用PCA方法，打印相关信息
         print("使用PCA进行降维...")
         # 使用PCA算法将高维特征降至2维
-        embedding = PCA(n_components=2, random_state=42).***REMOVED***t_transform(features)
+        embedding = PCA(n_components=2, random_state=42).fit_transform(features)
     
     # 绘制降维后的特征分布图
     # 创建一个新的图形，大小为10x8英寸
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+    plt.figure(figsize=(10, 8))
     # 使用散点图可视化降维后的特征，点的颜色根据类别标签着色
     # cmap='viridis'指定颜色映射方案，alpha=0.5设置点的透明度
     scatter = plt.scatter(embedding[:, 0], embedding[:, 1], c=labels, cmap='viridis', alpha=0.5)
@@ -503,7 +503,7 @@ def visualize_model_features(model, data_loader, device, method='tsne', save_pat
         # 自动调整图表布局
         plt.tight_layout()
         # 将图像保存到指定路径
-        plt.save***REMOVED***g(save_path)
+        plt.savefig(save_path)
         # 关闭当前图形，释放内存
         plt.close()
         # 打印保存成功的消息
@@ -574,10 +574,10 @@ if __name__ == "__main__":
     print(f"使用设备: {device}")
     
     # 获取项目根目录的绝对路径
-    # os.path.abspath(__***REMOVED***le__) 获取当前脚本的绝对路径
+    # os.path.abspath(__file__) 获取当前脚本的绝对路径
     # os.path.dirname() 获取路径的目录部分
     # 两次调用dirname()是为了从src目录返回到项目根目录auto-vision
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     
     # 设置默认的结果保存目录
     # 如果用户没有通过命令行指定结果目录
@@ -685,7 +685,7 @@ if __name__ == "__main__":
     else:
         # 如果是分类器类型
         # 调用分类器评估函数
-        metrics = evaluate_classi***REMOVED***er(
+        metrics = evaluate_classifier(
             model=model,  # 传入模型实例
             test_loader=test_loader,  # 传入测试数据加载器
             device=device  # 传入计算设备
@@ -700,7 +700,7 @@ if __name__ == "__main__":
         )
         
         # 打印详细的分类报告
-        print_classi***REMOVED***cation_report(
+        print_classification_report(
             metrics['all_targets'],  # 传入真实标签列表
             metrics['all_preds'],   # 传入预测标签列表
             class_names  # 传入类别名称列表

@@ -8,7 +8,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 
-from con***REMOVED***g import DATA_CONFIG, MODEL_CONFIG
+from config import DATA_CONFIG, MODEL_CONFIG
 
 
 class RatingDataset(Dataset):

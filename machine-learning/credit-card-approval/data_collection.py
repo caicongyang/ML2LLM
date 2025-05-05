@@ -142,13 +142,13 @@ def analyze_data(data, save_path='machine-learning/credit-card-approval/data/'):
     print(f"批准率: {target_counts[1] / len(data) * 100:.2f}%")
     
     # 可视化目标变量分布 - 使用柱状图显示批准和拒绝的数量
-    plt.***REMOVED***gure(***REMOVED***gsize=(8, 6))  # 设置图形大小
+    plt.figure(figsize=(8, 6))  # 设置图形大小
     sns.countplot(x='target', data=data)  # 使用seaborn绘制计数图
     plt.title('信用卡申请批准/拒绝分布')
     plt.xlabel('申请结果 (1=批准, 0=拒绝)')
     plt.ylabel('数量')
     # 保存图像，dpi=300表示高分辨率
-    plt.save***REMOVED***g(os.path.join(save_path, 'target_distribution.png'), dpi=300)
+    plt.savefig(os.path.join(save_path, 'target_distribution.png'), dpi=300)
     print(f"目标变量分布图已保存到 {os.path.join(save_path, 'target_distribution.png')}")
     
     # ========== 4. 数值特征分析 ==========
@@ -162,14 +162,14 @@ def analyze_data(data, save_path='machine-learning/credit-card-approval/data/'):
         print(data[numeric_columns].describe())
         
         # 可视化每个数值特征的分布
-        plt.***REMOVED***gure(***REMOVED***gsize=(15, 10))
+        plt.figure(figsize=(15, 10))
         for i, col in enumerate(numeric_columns, 1):
             plt.subplot(3, 3, i)  # 创建3x3的子图网格
             # 使用直方图+密度曲线显示分布，dropna()去除缺失值
             sns.histplot(data[col].dropna(), kde=True)
             plt.title(f'特征 {col} 分布')
         plt.tight_layout()  # 自动调整子图参数，使之填充整个图像区域
-        plt.save***REMOVED***g(os.path.join(save_path, 'numeric_features_distribution.png'), dpi=300)
+        plt.savefig(os.path.join(save_path, 'numeric_features_distribution.png'), dpi=300)
         print(f"数值特征分布图已保存到 {os.path.join(save_path, 'numeric_features_distribution.png')}")
     
     # ========== 5. 分类特征分析 ==========
@@ -186,7 +186,7 @@ def analyze_data(data, save_path='machine-learning/credit-card-approval/data/'):
             print(f"唯一值数量: {data[col].nunique()}")
         
         # 可视化前5个分类特征的分布（如果分类特征太多，只展示部分）
-        plt.***REMOVED***gure(***REMOVED***gsize=(15, 10))
+        plt.figure(figsize=(15, 10))
         for i, col in enumerate(categorical_columns[:5], 1):
             plt.subplot(2, 3, i)
             # 计算每个类别的频率
@@ -196,7 +196,7 @@ def analyze_data(data, save_path='machine-learning/credit-card-approval/data/'):
             plt.title(f'特征 {col} 分布')
             plt.xticks(rotation=45)  # 旋转x轴标签以避免重叠
         plt.tight_layout()
-        plt.save***REMOVED***g(os.path.join(save_path, 'categorical_features_distribution.png'), dpi=300)
+        plt.savefig(os.path.join(save_path, 'categorical_features_distribution.png'), dpi=300)
         print(f"分类特征分布图已保存到 {os.path.join(save_path, 'categorical_features_distribution.png')}")
 
 def main():

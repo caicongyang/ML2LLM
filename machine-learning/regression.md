@@ -38,7 +38,7 @@
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.functions.LinearRegression;
+import weka.classifiers.functions.LinearRegression;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -57,7 +57,7 @@ public class LinearRegressionExample {
         model.setAttributeSelectionMethod(new weka.attributeSelection.GeneticSearch());
         
         // 训练模型
-        model.buildClassi***REMOVED***er(data);
+        model.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(model);
@@ -85,7 +85,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 model = LinearRegression()
 
 # 训练模型
-model.***REMOVED***t(X_train, y_train)
+model.fit(X_train, y_train)
 
 # 预测
 y_pred = model.predict(X_test)
@@ -122,10 +122,10 @@ print(f"截距: {model.intercept_}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.functions.LinearRegression;
+import weka.classifiers.functions.LinearRegression;
 import weka.core.Instances;
-import weka.***REMOVED***lters.Filter;
-import weka.***REMOVED***lters.unsupervised.attribute.MathExpression;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.MathExpression;
 import weka.core.converters.ConverterUtils.DataSource;
 
 public class PolynomialRegressionExample {
@@ -137,12 +137,12 @@ public class PolynomialRegressionExample {
         // 添加多项式特征（这里以平方项为例）
         for (int i = 0; i < data.numAttributes() - 1; i++) {
             String attrName = data.attribute(i).name();
-            MathExpression ***REMOVED***lter = new MathExpression();
-            ***REMOVED***lter.setExpression("A*A");
-            ***REMOVED***lter.setAttributeIndex(String.valueOf(i+1));
-            ***REMOVED***lter.setResultAttribute(attrName+"_squared");
-            ***REMOVED***lter.setInputFormat(data);
-            data = Filter.useFilter(data, ***REMOVED***lter);
+            MathExpression filter = new MathExpression();
+            filter.setExpression("A*A");
+            filter.setAttributeIndex(String.valueOf(i+1));
+            filter.setResultAttribute(attrName+"_squared");
+            filter.setInputFormat(data);
+            data = Filter.useFilter(data, filter);
         }
         
         data.setClassIndex(data.numAttributes() - 1);
@@ -151,7 +151,7 @@ public class PolynomialRegressionExample {
         LinearRegression model = new LinearRegression();
         
         // 训练模型
-        model.buildClassi***REMOVED***er(data);
+        model.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(model);
@@ -184,7 +184,7 @@ model = Pipeline([
 ])
 
 # 训练模型
-model.***REMOVED***t(X_train, y_train)
+model.fit(X_train, y_train)
 
 # 预测
 y_pred = model.predict(X_test)
@@ -209,7 +209,7 @@ print(f"决定系数(R²): {r2:.2f}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.functions.LinearRegression;
+import weka.classifiers.functions.LinearRegression;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -227,7 +227,7 @@ public class RidgeRegressionExample {
         model.setRidge(1.0);
         
         // 训练模型
-        model.buildClassi***REMOVED***er(data);
+        model.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(model);
@@ -254,14 +254,14 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # 标准化特征
 scaler = StandardScaler()
-X_train_scaled = scaler.***REMOVED***t_transform(X_train)
+X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
 # 创建岭回归模型
 model = Ridge(alpha=1.0)  # alpha是正则化强度
 
 # 训练模型
-model.***REMOVED***t(X_train_scaled, y_train)
+model.fit(X_train_scaled, y_train)
 
 # 预测
 y_pred = model.predict(X_test_scaled)
@@ -286,7 +286,7 @@ print(f"决定系数(R²): {r2:.2f}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.trees.REPTree;
+import weka.classifiers.trees.REPTree;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -305,7 +305,7 @@ public class DecisionTreeRegressionExample {
         model.setMinNum(10);   // 每个叶节点的最小实例数
         
         // 训练模型
-        model.buildClassi***REMOVED***er(data);
+        model.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(model);
@@ -333,7 +333,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 model = DecisionTreeRegressor(max_depth=5, min_samples_leaf=10)
 
 # 训练模型
-model.***REMOVED***t(X_train, y_train)
+model.fit(X_train, y_train)
 
 # 预测
 y_pred = model.predict(X_test)
@@ -358,7 +358,7 @@ print(f"决定系数(R²): {r2:.2f}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.trees.RandomForest;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -378,7 +378,7 @@ public class RandomForestRegressionExample {
         model.setBagSizePercent(100);  // 每棵树使用的样本比例
         
         // 训练模型
-        model.buildClassi***REMOVED***er(data);
+        model.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(model);
@@ -406,7 +406,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 model = RandomForestRegressor(n_estimators=100, max_depth=None, min_samples_leaf=1)
 
 # 训练模型
-model.***REMOVED***t(X_train, y_train)
+model.fit(X_train, y_train)
 
 # 预测
 y_pred = model.predict(X_test)
@@ -426,8 +426,8 @@ print(f"决定系数(R²): {r2:.2f}")
 
 ```java
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
-import org.deeplearning4j.nn.conf.MultiLayerCon***REMOVED***guration;
-import org.deeplearning4j.nn.conf.NeuralNetCon***REMOVED***guration;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -438,7 +438,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.con***REMOVED***g.Adam;
+import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.Collections;
@@ -473,7 +473,7 @@ public class NeuralNetworkRegressionExample {
         DataSetIterator trainIter = new ListDataSetIterator<>(listDs, 10);
         
         // 配置神经网络
-        MultiLayerCon***REMOVED***guration conf = new NeuralNetCon***REMOVED***guration.Builder()
+        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
             .seed(42)
             .weightInit(WeightInit.XAVIER)
             .updater(new Adam(0.01))
@@ -503,7 +503,7 @@ public class NeuralNetworkRegressionExample {
         // 训练模型
         for (int i = 0; i < 100; i++) {
             trainIter.reset();
-            model.***REMOVED***t(trainIter);
+            model.fit(trainIter);
         }
         
         // 进行预测
@@ -538,7 +538,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # 标准化特征
 scaler = StandardScaler()
-X_train = scaler.***REMOVED***t_transform(X_train)
+X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 # 转换为PyTorch张量
@@ -666,7 +666,7 @@ public class SystemLoadPredictor {
         Instances data = convertToInstances(trainingData);
         
         // 训练模型
-        model.buildClassi***REMOVED***er(data);
+        model.buildClassifier(data);
     }
     
     public double predictCpuLoad(SystemMetrics currentMetrics) {

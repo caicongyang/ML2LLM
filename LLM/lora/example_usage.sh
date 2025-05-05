@@ -1,4 +1,4 @@
-***REMOVED***
+#!/bin/bash
 
 # 这是展示如何使用LoRA微调脚本的示例脚本
 
@@ -8,7 +8,7 @@ pip install -r requirements.txt
 
 # 示例1：使用Llama-2-7b进行基本LoRA微调
 echo "示例1：基本LoRA微调设置..."
-echo "python lora_***REMOVED***ne_tuning.py \
+echo "python lora_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-7b-hf\" \
   --dataset_path \"path/to/your_dataset.json\" \
   --output_dir \"./lora-llama-2-output\" \
@@ -23,7 +23,7 @@ echo "python lora_***REMOVED***ne_tuning.py \
 
 # 示例2：使用4位量化微调更大的模型
 echo "示例2：使用4位量化微调更大的模型..."
-echo "python lora_***REMOVED***ne_tuning.py \
+echo "python lora_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-13b-hf\" \
   --dataset_path \"path/to/your_dataset.json\" \
   --output_dir \"./lora-llama-2-13b-output\" \
@@ -38,7 +38,7 @@ echo "python lora_***REMOVED***ne_tuning.py \
 
 # 示例3：使用Hugging Face数据集微调
 echo "示例3：使用Hugging Face数据集微调..."
-echo "python lora_***REMOVED***ne_tuning.py \
+echo "python lora_fine_tuning.py \
   --model_name_or_path \"meta-llama/Llama-2-7b-hf\" \
   --dataset_path \"tatsu-lab/alpaca\" \
   --text_column \"text\" \
@@ -50,7 +50,7 @@ echo "python lora_***REMOVED***ne_tuning.py \
 
 # 示例4：使用8位量化 
 echo "示例4：使用8位量化..."
-echo "python lora_***REMOVED***ne_tuning.py \
+echo "python lora_fine_tuning.py \
   --model_name_or_path \"mistralai/Mistral-7B-v0.1\" \
   --dataset_path \"path/to/your_dataset.json\" \
   --output_dir \"./lora-mistral-output\" \

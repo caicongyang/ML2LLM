@@ -19,8 +19,8 @@ from torch.utils.data import DataLoader, TensorDataset  # 用于数据加载和�
 import matplotlib.pyplot as plt  # 用于绘图
 from sklearn.preprocessing import StandardScaler  # 用于特征标准化
 from sklearn.svm import SVC  # 支持向量机分类器
-from sklearn.ensemble import RandomForestClassi***REMOVED***er  # 随机森林分类器
-from sklearn.metrics import accuracy_score, classi***REMOVED***cation_report, confusion_matrix  # 用于模型评估
+from sklearn.ensemble import RandomForestClassifier  # 随机森林分类器
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix  # 用于模型评估
 import seaborn as sns  # 用于高级可视化
 from tqdm import tqdm  # 用于进度条显示
 
@@ -89,7 +89,7 @@ def extract_features(model, data_loader, device, latent_dim):
     return features, labels
 
 
-def train_classi***REMOVED***er(X_train, y_train, X_val, y_val, classi***REMOVED***er_type='svm'):
+def train_classifier(X_train, y_train, X_val, y_val, classifier_type='svm'):
     """
     训练分类器
     
@@ -98,38 +98,38 @@ def train_classi***REMOVED***er(X_train, y_train, X_val, y_val, classi***REMOVED
         y_train: 训练标签
         X_val: 验证特征
         y_val: 验证标签
-        classi***REMOVED***er_type: 分类器类型，'svm'或'rf'
+        classifier_type: 分类器类型，'svm'或'rf'
         
     Returns:
         训练好的分类器和特征缩放器
     """
     # 打印当前训练的分类器类型
-    print(f"训练{classi***REMOVED***er_type}分类器...")
+    print(f"训练{classifier_type}分类器...")
     
     # 标准化特征，使其均值为0，方差为1
     scaler = StandardScaler()
     # 对训练数据进行拟合和转换
-    X_train_scaled = scaler.***REMOVED***t_transform(X_train)
+    X_train_scaled = scaler.fit_transform(X_train)
     # 对验证数据仅进行转换（使用训练数据的统计量）
     X_val_scaled = scaler.transform(X_val)
     
     # 根据指定的分类器类型选择并训练分类器
-    if classi***REMOVED***er_type == 'svm':
+    if classifier_type == 'svm':
         # 创建支持向量机分类器，使用径向基函数核
-        classi***REMOVED***er = SVC(kernel='rbf', C=10, gamma='scale')
+        classifier = SVC(kernel='rbf', C=10, gamma='scale')
         # 使用训练数据拟合分类器
-        classi***REMOVED***er.***REMOVED***t(X_train_scaled, y_train)
+        classifier.fit(X_train_scaled, y_train)
     else:  # Random Forest
         # 创建随机森林分类器，使用100个决策树
-        classi***REMOVED***er = RandomForestClassi***REMOVED***er(n_estimators=100, random_state=42)
+        classifier = RandomForestClassifier(n_estimators=100, random_state=42)
         # 使用训练数据拟合分类器
-        classi***REMOVED***er.***REMOVED***t(X_train_scaled, y_train)
+        classifier.fit(X_train_scaled, y_train)
     
     # 评估分类器在训练集和验证集上的性能
     # 在训练集上进行预测
-    train_pred = classi***REMOVED***er.predict(X_train_scaled)
+    train_pred = classifier.predict(X_train_scaled)
     # 在验证集上进行预测
-    val_pred = classi***REMOVED***er.predict(X_val_scaled)
+    val_pred = classifier.predict(X_val_scaled)
     
     # 计算训练集准确率
     train_acc = accuracy_score(y_train, train_pred)
@@ -141,7 +141,7 @@ def train_classi***REMOVED***er(X_train, y_train, X_val, y_val, classi***REMOVED
     print(f"验证准确率: {val_acc:.4f}")
     
     # 返回训练好的分类器和特征缩放器
-    return classi***REMOVED***er, scaler
+    return classifier, scaler
 
 
 def plot_confusion_matrix(y_true, y_pred, class_names, save_path=None):
@@ -158,7 +158,7 @@ def plot_confusion_matrix(y_true, y_pred, class_names, save_path=None):
     cm = confusion_matrix(y_true, y_pred)
     
     # 创建一个新的图形，设置大小为10x8英寸
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+    plt.figure(figsize=(10, 8))
     # 使用seaborn绘制热力图可视化混淆矩阵
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
     # 设置x轴标签
@@ -173,7 +173,7 @@ def plot_confusion_matrix(y_true, y_pred, class_names, save_path=None):
         # 调整图形布局
         plt.tight_layout()
         # 保存图形到指定路径
-        plt.save***REMOVED***g(save_path)
+        plt.savefig(save_path)
         # 关闭当前图形
         plt.close()
         # 打印保存成功的消息
@@ -200,7 +200,7 @@ def main():
     parser.add_argument('--model-path', type=str, default=None, 
                         help='预训练模型路径')
     # 添加分类器类型参数，默认为svm
-    parser.add_argument('--classi***REMOVED***er', type=str, default='svm', 
+    parser.add_argument('--classifier', type=str, default='svm', 
                         choices=['svm', 'rf'], 
                         help='分类器类型')
     # 添加数据目录参数
@@ -292,13 +292,13 @@ def main():
     print(f"特征形状: {X_train.shape}")
     
     # 训练分类器（SVM或随机森林）
-    classi***REMOVED***er, scaler = train_classi***REMOVED***er(X_train, y_train, X_val, y_val, classi***REMOVED***er_type=args.classi***REMOVED***er)
+    classifier, scaler = train_classifier(X_train, y_train, X_val, y_val, classifier_type=args.classifier)
     
     # 评估分类器在测试集上的性能
     # 对测试集特征进行标准化
     X_test_scaled = scaler.transform(X_test)
     # 使用分类器进行预测
-    test_pred = classi***REMOVED***er.predict(X_test_scaled)
+    test_pred = classifier.predict(X_test_scaled)
     # 计算测试集准确率
     test_acc = accuracy_score(y_test, test_pred)
     
@@ -311,10 +311,10 @@ def main():
         'dog', 'frog', 'horse', 'ship', 'truck'
     ]
     # 打印详细的分类报告
-    print(classi***REMOVED***cation_report(y_test, test_pred, target_names=class_names))
+    print(classification_report(y_test, test_pred, target_names=class_names))
     
     # 创建保存结果的目录
-    save_dir = os.path.join(args.output_dir, 'results', f"{args.model_type}_{args.classi***REMOVED***er}")
+    save_dir = os.path.join(args.output_dir, 'results', f"{args.model_type}_{args.classifier}")
     # 确保目录存在
     os.makedirs(save_dir, exist_ok=True)
     
@@ -328,7 +328,7 @@ def main():
     print("\n比较与原始数据的分类效果...")
     
     # 定义一个简单的MLP分类器类
-    class SimpleClassi***REMOVED***er(nn.Module):
+    class SimpleClassifier(nn.Module):
         """
         简单多层感知机(MLP)分类器
         
@@ -348,13 +348,13 @@ def main():
         """
         def __init__(self, input_dim):
             """
-            初始化SimpleClassi***REMOVED***er类
+            初始化SimpleClassifier类
             
             Args:
                 input_dim (int): 输入特征的维度
             """
             # 调用父类的初始化方法
-            super(SimpleClassi***REMOVED***er, self).__init__()
+            super(SimpleClassifier, self).__init__()
             # 第一个全连接层，将输入特征映射到512维
             self.fc1 = nn.Linear(input_dim, 512)
             # 第二个全连接层，将512维特征映射到256维
@@ -428,7 +428,7 @@ def main():
     # 训练MLP分类器
     print("使用自编码器特征训练MLP分类器...")
     # 创建MLP分类器实例，输入维度为特征的维度
-    mlp = SimpleClassi***REMOVED***er(X_train.shape[1]).to(device)
+    mlp = SimpleClassifier(X_train.shape[1]).to(device)
     # 定义损失函数为交叉熵损失
     criterion = nn.CrossEntropyLoss()
     # 定义优化器为Adam，学习率为0.001
@@ -534,7 +534,7 @@ def main():
     # 打印MLP分类器在测试集上的准确率
     print(f"\nMLP分类器测试准确率: {100.*test_correct/test_total:.2f}%")
     # 打印比较信息，对比MLP和之前训练的分类器(SVM或随机森林)的性能
-    print(f"对比: 使用{args.classi***REMOVED***er}分类器的测试准确率为 {test_acc*100:.2f}%")
+    print(f"对比: 使用{args.classifier}分类器的测试准确率为 {test_acc*100:.2f}%")
     
     # 打印实验完成的消息
     print(f"特征提取和分类实验完成! 结果已保存到 {save_dir}")

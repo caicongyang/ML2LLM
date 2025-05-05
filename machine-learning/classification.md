@@ -42,7 +42,7 @@
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.trees.J48;
+import weka.classifiers.trees.J48;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -57,11 +57,11 @@ public class DecisionTreeExample {
         J48 tree = new J48();
         
         // 设置参数
-        tree.setCon***REMOVED***denceFactor(0.25f); // 剪枝信心因子
+        tree.setConfidenceFactor(0.25f); // 剪枝信心因子
         tree.setMinNumObj(2);            // 每个叶节点最小实例数
         
         // 训练模型
-        tree.buildClassi***REMOVED***er(data);
+        tree.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(tree);
@@ -72,7 +72,7 @@ public class DecisionTreeExample {
 Python实现 (使用scikit-learn):
 ```python
 from sklearn.datasets import load_iris
-from sklearn.tree import DecisionTreeClassi***REMOVED***er
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 
@@ -85,10 +85,10 @@ y = iris.target
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 
 # 创建决策树分类器
-clf = DecisionTreeClassi***REMOVED***er(criterion="gini", max_depth=3)
+clf = DecisionTreeClassifier(criterion="gini", max_depth=3)
 
 # 训练模型
-clf.***REMOVED***t(X_train, y_train)
+clf.fit(X_train, y_train)
 
 # 预测
 y_pred = clf.predict(X_test)
@@ -125,7 +125,7 @@ print(f"准确率: {accuracy:.2f}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.functions.Logistic;
+import weka.classifiers.functions.Logistic;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -144,7 +144,7 @@ public class LogisticRegressionExample {
         model.setRidge(1.0E-8);     // 正则化参数
         
         // 训练模型
-        model.buildClassi***REMOVED***er(data);
+        model.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(model);
@@ -171,7 +171,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 model = LogisticRegression(C=1.0, solver='liblinear', max_iter=100)
 
 # 训练模型
-model.***REMOVED***t(X_train, y_train)
+model.fit(X_train, y_train)
 
 # 预测
 y_pred = model.predict(X_test)
@@ -208,7 +208,7 @@ print(f"AUC: {metrics.roc_auc_score(y_test, y_prob[:, 1]):.2f}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.lazy.IBk;
+import weka.classifiers.lazy.IBk;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -226,7 +226,7 @@ public class KNNExample {
         knn.setKNN(3);
         
         // 训练模型
-        knn.buildClassi***REMOVED***er(data);
+        knn.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(knn);
@@ -236,7 +236,7 @@ public class KNNExample {
 
 Python实现 (使用scikit-learn):
 ```python
-from sklearn.neighbors import KNeighborsClassi***REMOVED***er
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
@@ -250,10 +250,10 @@ y = iris.target
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # 创建KNN分类器
-knn = KNeighborsClassi***REMOVED***er(n_neighbors=3)
+knn = KNeighborsClassifier(n_neighbors=3)
 
 # 训练模型
-knn.***REMOVED***t(X_train, y_train)
+knn.fit(X_train, y_train)
 
 # 预测
 y_pred = knn.predict(X_test)
@@ -287,7 +287,7 @@ print(f"准确率: {accuracy:.2f}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.functions.SMO;
+import weka.classifiers.functions.SMO;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -302,10 +302,10 @@ public class SVMExample {
         SMO svm = new SMO();
         
         // 设置参数
-        svm.setKernel(new weka.classi***REMOVED***ers.functions.supportVector.RBFKernel());
+        svm.setKernel(new weka.classifiers.functions.supportVector.RBFKernel());
         
         // 训练模型
-        svm.buildClassi***REMOVED***er(data);
+        svm.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(svm);
@@ -331,14 +331,14 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 # 标准化数据（SVM对特征缩放很敏感）
 scaler = StandardScaler()
-X_train = scaler.***REMOVED***t_transform(X_train)
+X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 # 创建SVM分类器
 svm = SVC(kernel='rbf', C=1.0, gamma='scale', probability=True)
 
 # 训练模型
-svm.***REMOVED***t(X_train, y_train)
+svm.fit(X_train, y_train)
 
 # 预测
 y_pred = svm.predict(X_test)
@@ -361,7 +361,7 @@ print(f"准确率: {accuracy:.2f}")
 
 Java实现 (使用Weka):
 ```java
-import weka.classi***REMOVED***ers.bayes.NaiveBayes;
+import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -379,7 +379,7 @@ public class NaiveBayesExample {
         nb.setUseKernelEstimator(false);  // 使用离散估计器
         
         // 训练模型
-        nb.buildClassi***REMOVED***er(data);
+        nb.buildClassifier(data);
         
         // 输出模型信息
         System.out.println(nb);
@@ -406,7 +406,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 gnb = GaussianNB()
 
 # 训练模型
-gnb.***REMOVED***t(X_train, y_train)
+gnb.fit(X_train, y_train)
 
 # 预测
 y_pred = gnb.predict(X_test)
@@ -430,7 +430,7 @@ if (data.classIndex() == -1)
 
 // 创建并训练决策树分类器
 J48 tree = new J48();
-tree.buildClassi***REMOVED***er(data);
+tree.buildClassifier(data);
 
 // 对新实例进行分类
 double predicted = tree.classifyInstance(newInstance);
@@ -440,7 +440,7 @@ double predicted = tree.classifyInstance(newInstance);
 
 ```java
 // 配置多层感知机分类器
-MultiLayerCon***REMOVED***guration conf = new NeuralNetCon***REMOVED***guration.Builder()
+MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
     .seed(123)
     .updater(new Sgd(0.1))
     .list()
@@ -471,7 +471,7 @@ Scikit-learn是Python中最流行的机器学习库，API简洁易用：
 
 ```python
 # 决策树
-from sklearn.tree import DecisionTreeClassi***REMOVED***er
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 
@@ -481,8 +481,8 @@ X, y = iris.data, iris.target
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 # 创建并训练模型
-clf = DecisionTreeClassi***REMOVED***er()
-clf.***REMOVED***t(X_train, y_train)
+clf = DecisionTreeClassifier()
+clf.fit(X_train, y_train)
 
 # 预测
 predictions = clf.predict(X_test)
@@ -510,7 +510,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # 标准化数据
 scaler = StandardScaler()
-X_train = scaler.***REMOVED***t_transform(X_train)
+X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 # 转换为PyTorch张量
@@ -520,9 +520,9 @@ X_test = torch.FloatTensor(X_test)
 y_test = torch.LongTensor(y_test)
 
 # 定义模型
-class IrisClassi***REMOVED***er(nn.Module):
+class IrisClassifier(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
-        super(IrisClassi***REMOVED***er, self).__init__()
+        super(IrisClassifier, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(hidden_size, num_classes)
@@ -537,7 +537,7 @@ class IrisClassi***REMOVED***er(nn.Module):
 input_size = 4  # 特征数量
 hidden_size = 20
 num_classes = 3  # 类别数量
-model = IrisClassi***REMOVED***er(input_size, hidden_size, num_classes)
+model = IrisClassifier(input_size, hidden_size, num_classes)
 
 # 损失函数和优化器
 criterion = nn.CrossEntropyLoss()
@@ -600,13 +600,13 @@ preprocessor = ColumnTransformer(
     ])
 
 # 3. 模型训练与评估
-from sklearn.ensemble import RandomForestClassi***REMOVED***er
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 
 # 创建完整管道
 clf = Pipeline(steps=[
     ('preprocessor', preprocessor),
-    ('classi***REMOVED***er', RandomForestClassi***REMOVED***er())
+    ('classifier', RandomForestClassifier())
 ])
 
 # 交叉验证
@@ -617,12 +617,12 @@ print(f"交叉验证准确率: {scores.mean():.2f} (+/- {scores.std()*2:.2f})")
 from sklearn.model_selection import GridSearchCV
 
 param_grid = {
-    'classi***REMOVED***er__n_estimators': [50, 100, 200],
-    'classi***REMOVED***er__max_depth': [None, 10, 20, 30]
+    'classifier__n_estimators': [50, 100, 200],
+    'classifier__max_depth': [None, 10, 20, 30]
 }
 
 grid_search = GridSearchCV(clf, param_grid, cv=5)
-grid_search.***REMOVED***t(X_train, y_train)
+grid_search.fit(X_train, y_train)
 print(f"最佳参数: {grid_search.best_params_}")
 ```
 

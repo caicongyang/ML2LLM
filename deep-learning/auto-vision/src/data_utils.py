@@ -27,7 +27,7 @@ def load_cifar10(data_dir=None, val_size=0.1, apply_augmentation=True):
     """
     # 如果未指定数据目录，则使用auto-vision/data
     if data_dir is None:
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         data_dir = os.path.join(base_dir, 'data')
     
     # 确保数据目录存在
@@ -196,7 +196,7 @@ if __name__ == "__main__":
     print("测试数据加载功能...")
     
     # 获取默认的数据目录
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     data_dir = os.path.join(base_dir, 'data')
     
     train_dataset, val_dataset, test_dataset, class_names = load_cifar10(data_dir=data_dir)

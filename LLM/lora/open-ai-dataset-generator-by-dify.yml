@@ -17,32 +17,32 @@ workflow:
   conversation_variables: []
   environment_variables: []
   features:
-    ***REMOVED***le_upload:
-      allowed_***REMOVED***le_extensions:
+    file_upload:
+      allowed_file_extensions:
       - .JPG
       - .JPEG
       - .PNG
       - .GIF
       - .WEBP
       - .SVG
-      allowed_***REMOVED***le_types:
+      allowed_file_types:
       - image
-      allowed_***REMOVED***le_upload_methods:
-      - local_***REMOVED***le
+      allowed_file_upload_methods:
+      - local_file
       - remote_url
       enabled: false
-      ***REMOVED***leUploadCon***REMOVED***g:
-        audio_***REMOVED***le_size_limit: 50
+      fileUploadConfig:
+        audio_file_size_limit: 50
         batch_count_limit: 5
-        ***REMOVED***le_size_limit: 15
-        image_***REMOVED***le_size_limit: 10
-        video_***REMOVED***le_size_limit: 100
-        workflow_***REMOVED***le_upload_limit: 10
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
       image:
         enabled: false
         number_limits: 3
         transfer_methods:
-        - local_***REMOVED***le
+        - local_file
         - remote_url
       number_limits: 3
     opening_statement: ''
@@ -112,23 +112,23 @@ workflow:
         title: 开始
         type: start
         variables:
-        - allowed_***REMOVED***le_extensions: []
-          allowed_***REMOVED***le_types:
+        - allowed_file_extensions: []
+          allowed_file_types:
           - document
-          allowed_***REMOVED***le_upload_methods:
-          - local_***REMOVED***le
+          allowed_file_upload_methods:
+          - local_file
           - remote_url
           label: 语料文件
           max_length: 10
           options: []
           required: true
-          type: ***REMOVED***le-list
+          type: file-list
           variable: attachments
-        - allowed_***REMOVED***le_extensions: []
-          allowed_***REMOVED***le_types:
+        - allowed_file_extensions: []
+          allowed_file_types:
           - image
-          allowed_***REMOVED***le_upload_methods:
-          - local_***REMOVED***le
+          allowed_file_upload_methods:
+          - local_file
           - remote_url
           label: 触发词（训练中的 system prompt）
           max_length: 48
@@ -151,7 +151,7 @@ workflow:
       width: 244
     - data:
         desc: ''
-        is_array_***REMOVED***le: true
+        is_array_file: true
         selected: false
         title: 文档提取器
         type: document-extractor

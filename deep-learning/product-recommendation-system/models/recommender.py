@@ -3,7 +3,7 @@
 
 这个模块定义了用于商品推荐系统的两种不同的神经网络模型：
 1. NCFModel: 一个结合了矩阵分解和多层感知机的完整神经协同过滤模型
-2. Simpli***REMOVED***edNCF: 一个简化版的神经协同过滤模型，适用于较小的数据集或资源有限的环境
+2. SimplifiedNCF: 一个简化版的神经协同过滤模型，适用于较小的数据集或资源有限的环境
 """
 import torch
 import torch.nn as nn
@@ -26,7 +26,7 @@ class NCFModel(nn.Module):
 
     参考论文：
     He, X., Liao, L., Zhang, H., Nie, L., Hu, X., & Chua, T. S. (2017). 
-    Neural collaborative ***REMOVED***ltering. In Proceedings of the 26th international 
+    Neural collaborative filtering. In Proceedings of the 26th international 
     conference on world wide web (pp. 173-182).
     """
     def __init__(self, num_users, num_items, embedding_dim=64, hidden_layers=[128, 64, 32], dropout=0.2):
@@ -68,7 +68,7 @@ class NCFModel(nn.Module):
         
         # 最终预测层 - 结合GMF和MLP的输出
         # 输入是GMF输出(embedding_dim)和MLP最后一层输出(hidden_layers[-1])的拼接
-        self.***REMOVED***nal_layer = nn.Linear(hidden_layers[-1] + embedding_dim, 1)
+        self.final_layer = nn.Linear(hidden_layers[-1] + embedding_dim, 1)
         
         # 初始化参数
         self._init_weights()
@@ -125,12 +125,12 @@ class NCFModel(nn.Module):
         combined = torch.cat([gmf_output, mlp_input], dim=-1)  # [batch_size, embedding_dim + hidden_layers[-1]]
         
         # 最终预测
-        prediction = self.***REMOVED***nal_layer(combined)  # [batch_size, 1]
+        prediction = self.final_layer(combined)  # [batch_size, 1]
         # sigmoid确保输出在0到1之间，适合评分预测
         return torch.sigmoid(prediction).squeeze()  # [batch_size]
 
 
-class Simpli***REMOVED***edNCF(nn.Module):
+class SimplifiedNCF(nn.Module):
     """
     简化版神经协同过滤模型
     
@@ -161,7 +161,7 @@ class Simpli***REMOVED***edNCF(nn.Module):
             hidden_dim (int): 隐藏层神经元数量
             dropout (float): Dropout比例，防止过拟合
         """
-        super(Simpli***REMOVED***edNCF, self).__init__()
+        super(SimplifiedNCF, self).__init__()
         
         # 嵌入层 - 将用户和商品ID映射到低维向量空间
         self.user_embedding = nn.Embedding(num_users, embedding_dim)

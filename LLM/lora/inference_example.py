@@ -17,7 +17,7 @@ LoRA微调模型推理示例
 import argparse
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import PeftModel, PeftCon***REMOVED***g
+from peft import PeftModel, PeftConfig
 
 # 解析命令行参数
 def parse_args():
@@ -64,8 +64,8 @@ def main():
     
     if args.use_4bit:
         print("使用4位量化...")
-        from transformers import BitsAndBytesCon***REMOVED***g
-        model_kwargs["quantization_con***REMOVED***g"] = BitsAndBytesCon***REMOVED***g(
+        from transformers import BitsAndBytesConfig
+        model_kwargs["quantization_config"] = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch.float16,
             bnb_4bit_use_double_quant=True,
@@ -82,8 +82,8 @@ def main():
     )
     
     # 加载LoRA配置以检查参数
-    peft_con***REMOVED***g = PeftCon***REMOVED***g.from_pretrained(args.lora_model)
-    print(f"LoRA配置已加载: target_modules={peft_con***REMOVED***g.target_modules}, r={peft_con***REMOVED***g.r}, lora_alpha={peft_con***REMOVED***g.lora_alpha}")
+    peft_config = PeftConfig.from_pretrained(args.lora_model)
+    print(f"LoRA配置已加载: target_modules={peft_config.target_modules}, r={peft_config.r}, lora_alpha={peft_config.lora_alpha}")
     
     # 加载LoRA模型
     print(f"正在从{args.lora_model}加载LoRA适配器...")

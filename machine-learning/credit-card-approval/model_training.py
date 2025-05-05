@@ -32,19 +32,19 @@ from sklearn.metrics import recall_score     # 召回率：实际为正的样本
 from sklearn.metrics import f1_score         # F1分数：精确率和召回率的调和平均数
 from sklearn.metrics import roc_auc_score    # ROC曲线下面积，衡量二分类模型性能
 from sklearn.metrics import confusion_matrix  # 混淆矩阵，展示TP/TN/FP/FN的数量
-from sklearn.metrics import classi***REMOVED***cation_report  # 分类报告，包含精确率、召回率等多项指标
+from sklearn.metrics import classification_report  # 分类报告，包含精确率、召回率等多项指标
 from sklearn.metrics import roc_curve        # ROC曲线数据
 from sklearn.metrics import precision_recall_curve  # 精确率-召回率曲线数据
 
 # 导入各种分类模型
 from sklearn.linear_model import LogisticRegression  # 逻辑回归，线性分类器
-from sklearn.tree import DecisionTreeClassi***REMOVED***er      # 决策树
-from sklearn.ensemble import RandomForestClassi***REMOVED***er  # 随机森林，多个决策树的集成
-from sklearn.ensemble import GradientBoostingClassi***REMOVED***er  # 梯度提升，通过迭代优化弱学习器
+from sklearn.tree import DecisionTreeClassifier      # 决策树
+from sklearn.ensemble import RandomForestClassifier  # 随机森林，多个决策树的集成
+from sklearn.ensemble import GradientBoostingClassifier  # 梯度提升，通过迭代优化弱学习器
 from sklearn.svm import SVC                          # 支持向量机
-from sklearn.neighbors import KNeighborsClassi***REMOVED***er   # K近邻分类器
+from sklearn.neighbors import KNeighborsClassifier   # K近邻分类器
 from sklearn.naive_bayes import GaussianNB           # 高斯朴素贝叶斯
-from sklearn.neural_network import MLPClassi***REMOVED***er     # 多层感知机 (神经网络)
+from sklearn.neural_network import MLPClassifier     # 多层感知机 (神经网络)
 
 # 导入管道和特征工程组件
 from sklearn.pipeline import Pipeline               # 构建机器学习工作流的工具
@@ -86,8 +86,8 @@ plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'Microsoft YaHe
 plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题
 
 # 获取脚本所在目录的绝对路径，用于确保在任何目录运行脚本时都能找到正确的文件
-# __***REMOVED***le__是当前脚本的路径，abspath获取绝对路径，dirname获取目录名
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+# __file__是当前脚本的路径，abspath获取绝对路径，dirname获取目录名
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def get_absolute_path(relative_path):
     """
@@ -96,30 +96,30 @@ def get_absolute_path(relative_path):
     这个函数确保无论从哪个目录运行脚本，都能正确找到相对于脚本位置的文件
     
     参数:
-    relative_path (str): 相对路径，如'data/***REMOVED***le.csv'
+    relative_path (str): 相对路径，如'data/file.csv'
     
     返回:
-    str: 绝对路径，如'/home/user/project/data/***REMOVED***le.csv'
+    str: 绝对路径，如'/home/user/project/data/file.csv'
     """
     return os.path.join(SCRIPT_DIR, relative_path)
 
-def load_engineered_data(***REMOVED***le_path='data/engineered_data.csv'):
+def load_engineered_data(file_path='data/engineered_data.csv'):
     """
     加载特征工程后的数据集
     
     此函数负责从CSV文件中读取处理过的数据，并处理可能出现的错误
     
     参数:
-    ***REMOVED***le_path (str): 数据文件相对路径，默认为'data/engineered_data.csv'
+    file_path (str): 数据文件相对路径，默认为'data/engineered_data.csv'
     
     返回:
     pandas.DataFrame: 加载的数据集，若加载失败则返回None
     """
     # 转换为绝对路径，确保从任何位置都能找到文件
-    abs_***REMOVED***le_path = get_absolute_path(***REMOVED***le_path)
+    abs_file_path = get_absolute_path(file_path)
     try:
         # 尝试读取CSV文件
-        data = pd.read_csv(abs_***REMOVED***le_path)
+        data = pd.read_csv(abs_file_path)
         print(f"成功加载特征工程后的数据，形状为: {data.shape}")
         return data
     except Exception as e:
@@ -199,7 +199,7 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name):
     start_time = time.time()
     
     # 训练模型 - 使用训练集拟合模型
-    model.***REMOVED***t(X_train, y_train)
+    model.fit(X_train, y_train)
     
     # 计算训练时间
     train_time = time.time() - start_time
@@ -252,14 +252,14 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name):
     # 计算并可视化混淆矩阵
     # 混淆矩阵展示了预测类别与实际类别的对应关系，包含TP/TN/FP/FN
     cm = confusion_matrix(y_test, y_test_pred)
-    plt.***REMOVED***gure(***REMOVED***gsize=(8, 6))  # 设置图形大小
+    plt.figure(figsize=(8, 6))  # 设置图形大小
     # 使用seaborn的热图展示混淆矩阵，带数值标注
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['拒绝', '通过'], yticklabels=['拒绝', '通过'])
     plt.xlabel('预测标签')  # x轴标签
     plt.ylabel('真实标签')  # y轴标签
     plt.title(f'{model_name} 混淆矩阵')  # 图表标题
     # 保存混淆矩阵图像到文件
-    plt.save***REMOVED***g(get_absolute_path(f'data/{model_name.lower().replace(" ", "_")}_confusion_matrix.png'))
+    plt.savefig(get_absolute_path(f'data/{model_name.lower().replace(" ", "_")}_confusion_matrix.png'))
     print(f"{model_name} 混淆矩阵已保存到 data/{model_name.lower().replace(' ', '_')}_confusion_matrix.png")
     
     # 如果模型支持概率预测，绘制ROC曲线和精确率-召回率曲线
@@ -267,7 +267,7 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name):
         # 绘制ROC曲线
         # ROC曲线展示了不同阈值下的真正例率（TPR）和假正例率（FPR）
         fpr, tpr, _ = roc_curve(y_test, y_test_prob)  # 计算ROC曲线坐标
-        plt.***REMOVED***gure(***REMOVED***gsize=(8, 6))  # 设置图形大小
+        plt.figure(figsize=(8, 6))  # 设置图形大小
         # 绘制ROC曲线，标注AUC值
         plt.plot(fpr, tpr, label=f'ROC曲线 (AUC = {metrics["test_roc_auc"] if "test_roc_auc" in metrics else "N/A":.4f})')
         plt.plot([0, 1], [0, 1], 'k--', label='随机猜测')  # 绘制对角线，代表随机猜测
@@ -277,13 +277,13 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name):
         plt.legend(loc='lower right')  # 图例位置
         plt.grid(True)  # 显示网格
         # 保存ROC曲线图像到文件
-        plt.save***REMOVED***g(get_absolute_path(f'data/{model_name.lower().replace(" ", "_")}_roc_curve.png'))
+        plt.savefig(get_absolute_path(f'data/{model_name.lower().replace(" ", "_")}_roc_curve.png'))
         print(f"{model_name} ROC曲线已保存到 data/{model_name.lower().replace(' ', '_')}_roc_curve.png")
         
         # 绘制精确率-召回率曲线
         # PR曲线展示了不同阈值下的精确率和召回率之间的权衡
         precision, recall, _ = precision_recall_curve(y_test, y_test_prob)  # 计算PR曲线坐标
-        plt.***REMOVED***gure(***REMOVED***gsize=(8, 6))  # 设置图形大小
+        plt.figure(figsize=(8, 6))  # 设置图形大小
         plt.plot(recall, precision, label=f'精确率-召回率曲线')  # 绘制PR曲线
         plt.xlabel('召回率')  # x轴标签
         plt.ylabel('精确率')  # y轴标签
@@ -291,7 +291,7 @@ def train_model(model, X_train, y_train, X_test, y_test, model_name):
         plt.legend(loc='lower left')  # 图例位置
         plt.grid(True)  # 显示网格
         # 保存PR曲线图像到文件
-        plt.save***REMOVED***g(get_absolute_path(f'data/{model_name.lower().replace(" ", "_")}_pr_curve.png'))
+        plt.savefig(get_absolute_path(f'data/{model_name.lower().replace(" ", "_")}_pr_curve.png'))
         print(f"{model_name} 精确率-召回率曲线已保存到 data/{model_name.lower().replace(' ', '_')}_pr_curve.png")
     
     return model, metrics
@@ -317,13 +317,13 @@ def train_multiple_models(X_train, y_train, X_test, y_test):
     # 创建模型字典，包含8种常用的分类模型
     models = {
         'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),  # 逻辑回归，max_iter增大以确保收敛
-        'Decision Tree': DecisionTreeClassi***REMOVED***er(random_state=42),                   # 决策树
-        'Random Forest': RandomForestClassi***REMOVED***er(random_state=42),                   # 随机森林
-        'Gradient Boosting': GradientBoostingClassi***REMOVED***er(random_state=42),           # 梯度提升
+        'Decision Tree': DecisionTreeClassifier(random_state=42),                   # 决策树
+        'Random Forest': RandomForestClassifier(random_state=42),                   # 随机森林
+        'Gradient Boosting': GradientBoostingClassifier(random_state=42),           # 梯度提升
         'SVM': SVC(random_state=42, probability=True),                             # 支持向量机，启用概率输出
-        'K-Nearest Neighbors': KNeighborsClassi***REMOVED***er(),                              # K近邻
+        'K-Nearest Neighbors': KNeighborsClassifier(),                              # K近邻
         'Naive Bayes': GaussianNB(),                                                # 高斯朴素贝叶斯
-        'Neural Network': MLPClassi***REMOVED***er(random_state=42, max_iter=1000)             # 多层感知机（神经网络）
+        'Neural Network': MLPClassifier(random_state=42, max_iter=1000)             # 多层感知机（神经网络）
     }
     
     # 用于存储训练好的模型和性能指标
@@ -358,36 +358,36 @@ def train_multiple_models(X_train, y_train, X_test, y_test):
     # 生成各种比较可视化图表
     
     # 准确率比较柱状图
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))  # 设置图形大小
+    plt.figure(figsize=(12, 8))  # 设置图形大小
     sns.barplot(x='Accuracy', y='Model', data=model_comparison)  # 创建水平柱状图
     plt.title('模型准确率比较')  # 图表标题
     plt.grid(True)  # 显示网格
-    plt.save***REMOVED***g(get_absolute_path('data/model_accuracy_comparison.png'))  # 保存图像
+    plt.savefig(get_absolute_path('data/model_accuracy_comparison.png'))  # 保存图像
     print("模型准确率比较图已保存到 data/model_accuracy_comparison.png")
     
     # F1分数比较柱状图
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+    plt.figure(figsize=(12, 8))
     sns.barplot(x='F1 Score', y='Model', data=model_comparison)
     plt.title('模型F1分数比较')
     plt.grid(True)
-    plt.save***REMOVED***g(get_absolute_path('data/model_f1_comparison.png'))
+    plt.savefig(get_absolute_path('data/model_f1_comparison.png'))
     print("模型F1分数比较图已保存到 data/model_f1_comparison.png")
     
     # ROC AUC比较柱状图
     # 只包含支持概率预测的模型（dropna移除NaN值）
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+    plt.figure(figsize=(12, 8))
     sns.barplot(x='ROC AUC', y='Model', data=model_comparison.dropna(subset=['ROC AUC']))
     plt.title('模型ROC AUC比较')
     plt.grid(True)
-    plt.save***REMOVED***g(get_absolute_path('data/model_roc_auc_comparison.png'))
+    plt.savefig(get_absolute_path('data/model_roc_auc_comparison.png'))
     print("模型ROC AUC比较图已保存到 data/model_roc_auc_comparison.png")
     
     # 训练时间比较柱状图
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+    plt.figure(figsize=(12, 8))
     sns.barplot(x='Training Time (s)', y='Model', data=model_comparison)
     plt.title('模型训练时间比较')
     plt.grid(True)
-    plt.save***REMOVED***g(get_absolute_path('data/model_training_time_comparison.png'))
+    plt.savefig(get_absolute_path('data/model_training_time_comparison.png'))
     print("模型训练时间比较图已保存到 data/model_training_time_comparison.png")
     
     # 保存模型比较结果到CSV文件
@@ -509,7 +509,7 @@ def tune_hyperparameters(model_name, X_train, y_train, X_test, y_test):
     
     # 执行超参数搜索
     start_time = time.time()
-    random_search.***REMOVED***t(X_train, y_train)  # 在训练数据上拟合
+    random_search.fit(X_train, y_train)  # 在训练数据上拟合
     search_time = time.time() - start_time
     
     # 输出搜索结果
@@ -549,29 +549,29 @@ def get_model_instance(model_name):
     model_name (str): 模型名称，如'Random Forest'
     
     返回:
-    object: 模型实例，如RandomForestClassi***REMOVED***er对象
+    object: 模型实例，如RandomForestClassifier对象
     """
     # 创建基础模型字典，包含常用分类模型
     models = {
         'Logistic Regression': LogisticRegression(max_iter=1000, random_state=42),  # 逻辑回归
-        'Random Forest': RandomForestClassi***REMOVED***er(random_state=42),                   # 随机森林
-        'Gradient Boosting': GradientBoostingClassi***REMOVED***er(random_state=42),           # 梯度提升
+        'Random Forest': RandomForestClassifier(random_state=42),                   # 随机森林
+        'Gradient Boosting': GradientBoostingClassifier(random_state=42),           # 梯度提升
         'SVM': SVC(probability=True, random_state=42),                             # 支持向量机
-        'Decision Tree': DecisionTreeClassi***REMOVED***er(random_state=42),                   # 决策树
-        'K-Nearest Neighbors': KNeighborsClassi***REMOVED***er(),                              # K近邻
-        'MLP': MLPClassi***REMOVED***er(max_iter=1000, random_state=42)                       # 神经网络
+        'Decision Tree': DecisionTreeClassifier(random_state=42),                   # 决策树
+        'K-Nearest Neighbors': KNeighborsClassifier(),                              # K近邻
+        'MLP': MLPClassifier(max_iter=1000, random_state=42)                       # 神经网络
     }
     
     # 添加可选模型（如果已导入）
     # 检查全局命名空间中是否存在这些类
-    if 'XGBClassi***REMOVED***er' in globals():
-        models['XGBoost'] = xgb.XGBClassi***REMOVED***er(use_label_encoder=False, eval_metric='logloss', random_state=42)
+    if 'XGBClassifier' in globals():
+        models['XGBoost'] = xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42)
     
-    if 'LGBMClassi***REMOVED***er' in globals():
-        models['LightGBM'] = lgb.LGBMClassi***REMOVED***er(random_state=42)
+    if 'LGBMClassifier' in globals():
+        models['LightGBM'] = lgb.LGBMClassifier(random_state=42)
     
-    if 'CatBoostClassi***REMOVED***er' in globals():
-        models['CatBoost'] = cb.CatBoostClassi***REMOVED***er(verbose=False, random_state=42)
+    if 'CatBoostClassifier' in globals():
+        models['CatBoost'] = cb.CatBoostClassifier(verbose=False, random_state=42)
         
     return models.get(model_name)  # 从字典中获取对应模型实例
 
@@ -604,7 +604,7 @@ def calculate_metrics(y_true, y_pred, y_prob=None):
     
     return metrics
 
-def save_model(model, ***REMOVED***le_path):
+def save_model(model, file_path):
     """
     保存模型到指定路径
     
@@ -613,14 +613,14 @@ def save_model(model, ***REMOVED***le_path):
     
     参数:
     model: 要保存的训练好的模型
-    ***REMOVED***le_path (str): 模型保存路径，相对于脚本目录
+    file_path (str): 模型保存路径，相对于脚本目录
     """
     # 获取绝对路径
-    model_***REMOVED***le = get_absolute_path(***REMOVED***le_path)
+    model_file = get_absolute_path(file_path)
     # 使用joblib.dump保存模型
     # joblib比pickle更高效，特别是对于包含大量numpy数组的模型
-    joblib.dump(model, model_***REMOVED***le)
-    print(f"模型已保存到 {model_***REMOVED***le}")
+    joblib.dump(model, model_file)
+    print(f"模型已保存到 {model_file}")
 
 def train_and_save_best_model(data=None, target_metric='f1'):
     """
@@ -695,8 +695,8 @@ def train_and_save_best_model(data=None, target_metric='f1'):
     
     # 步骤6：保存调优后的最佳模型
     # 构建模型文件名，替换空格为下划线
-    model_***REMOVED***lename = get_absolute_path(f"data/best_model_{best_model_name.lower().replace(' ', '_')}.pkl")
-    save_model(tuned_model, model_***REMOVED***lename)
+    model_filename = get_absolute_path(f"data/best_model_{best_model_name.lower().replace(' ', '_')}.pkl")
+    save_model(tuned_model, model_filename)
     
     # 步骤7：创建完整的处理流程（机器学习流水线）
     print("\n创建完整的模型处理流程...")
@@ -704,7 +704,7 @@ def train_and_save_best_model(data=None, target_metric='f1'):
     # 创建特征选择器 - 使用调优后的模型选择最重要的特征
     # 'median'阈值表示只保留重要性大于所有特征重要性中位数的特征
     feature_selector = SelectFromModel(tuned_model, threshold='median')
-    feature_selector.***REMOVED***t(X_train, y_train)
+    feature_selector.fit(X_train, y_train)
     
     # 创建特征工程步骤
     
@@ -718,16 +718,16 @@ def train_and_save_best_model(data=None, target_metric='f1'):
     
     # 创建完整的处理流水线
     # 按顺序应用特征选择、特征组合、降维和最终模型
-    ***REMOVED***nal_model = tuned_model
+    final_model = tuned_model
     complete_pipeline = Pipeline([
         ('feature_selector', feature_selector),  # 第一步：特征选择
         ('poly_features', poly_features),        # 第二步：创建特征交互项
         ('pca', pca),                           # 第三步：降维
-        ('model', ***REMOVED***nal_model)                  # 第四步：调优后的模型
+        ('model', final_model)                  # 第四步：调优后的模型
     ])
     
     # 在训练数据上拟合完整流程
-    complete_pipeline.***REMOVED***t(X_train, y_train)
+    complete_pipeline.fit(X_train, y_train)
     
     # 评估完整流程在测试集上的性能
     pipeline_predictions = complete_pipeline.predict(X_test)
@@ -744,8 +744,8 @@ def train_and_save_best_model(data=None, target_metric='f1'):
         print(f"{k}: {v:.4f}")
     
     # 保存完整的流水线模型
-    pipeline_***REMOVED***lename = get_absolute_path('data/complete_model_pipeline.pkl')
-    save_model(complete_pipeline, pipeline_***REMOVED***lename)
+    pipeline_filename = get_absolute_path('data/complete_model_pipeline.pkl')
+    save_model(complete_pipeline, pipeline_filename)
     
     return complete_pipeline, pipeline_metrics
 

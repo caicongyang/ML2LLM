@@ -8,7 +8,7 @@
 LLaMA-Factory框架提供了更集成、更易用的微调体验，特别适合指令微调场景。
 
 用法:
-    python llama_factory_***REMOVED***ne_tuning.py --model_name_or_path <基础模型> 
+    python llama_factory_fine_tuning.py --model_name_or_path <基础模型> 
                                         --dataset_path <数据集路径> 
                                         --output_dir <输出目录>
                                         
@@ -28,7 +28,7 @@ from llmtuner.webui.utils import get_model_path
 from llmtuner.extras.constants import TRAINING_STAGES
 
 # 设置日志
-logging.basicCon***REMOVED***g(
+logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
@@ -120,16 +120,16 @@ def prepare_dataset(dataset_path: str, dataset_format: str) -> List[Dict[str, An
     
     # 如果是目录，则加载该目录下所有json文件
     if os.path.isdir(dataset_path):
-        data_***REMOVED***les = [os.path.join(dataset_path, f) for f in os.listdir(dataset_path) 
+        data_files = [os.path.join(dataset_path, f) for f in os.listdir(dataset_path) 
                      if f.endswith('.json')]
         all_data = []
-        for ***REMOVED***le in data_***REMOVED***les:
-            with open(***REMOVED***le, 'r', encoding='utf-8') as f:
+        for file in data_files:
+            with open(file, 'r', encoding='utf-8') as f:
                 all_data.extend(json.load(f))
         return all_data
     
     # 如果是单个文件
-    elif os.path.is***REMOVED***le(dataset_path):
+    elif os.path.isfile(dataset_path):
         with open(dataset_path, 'r', encoding='utf-8') as f:
             if dataset_path.endswith('.json'):
                 return json.load(f)
@@ -161,7 +161,7 @@ def setup_llama_factory_args(args) -> Dict[str, Any]:
         "use_fast_tokenizer": True,
         "trust_remote_code": True,
         "device_map": device_map,
-        "***REMOVED***netuning_type": "lora",  # 使用LoRA
+        "finetuning_type": "lora",  # 使用LoRA
         "resume_lora_training": True,
         "use_auth_token": False
     }
@@ -260,11 +260,11 @@ def main():
         # 保存处理后的数据集到LLaMA-Factory格式文件
         dataset_dir = os.path.join(args.output_dir, "dataset")
         os.makedirs(dataset_dir, exist_ok=True)
-        dataset_***REMOVED***le = os.path.join(dataset_dir, f"{args.dataset_format}.json")
+        dataset_file = os.path.join(dataset_dir, f"{args.dataset_format}.json")
         
-        with open(dataset_***REMOVED***le, 'w', encoding='utf-8') as f:
+        with open(dataset_file, 'w', encoding='utf-8') as f:
             json.dump(dataset, f, ensure_ascii=False, indent=2)
-        logger.info(f"数据集已保存到: {dataset_***REMOVED***le}")
+        logger.info(f"数据集已保存到: {dataset_file}")
         
     except Exception as e:
         logger.error(f"处理数据集时出错: {e}")
@@ -274,7 +274,7 @@ def main():
     llama_factory_args = setup_llama_factory_args(args)
     
     # 将参数保存到文件，用于记录
-    with open(os.path.join(args.output_dir, "training_con***REMOVED***g.json"), 'w', encoding='utf-8') as f:
+    with open(os.path.join(args.output_dir, "training_config.json"), 'w', encoding='utf-8') as f:
         json.dump(llama_factory_args, f, ensure_ascii=False, indent=2)
     
     # 使用LLaMA-Factory进行训练

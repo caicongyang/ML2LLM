@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 from models.recommender import NCFModel  # 导入自定义的NCF模型
 from utils.data_utils import load_data  # 导入数据加载工具
-from con***REMOVED***g import MODEL_CONFIG, RECOMMEND_CONFIG, MISC_CONFIG  # 导入配置参数
+from config import MODEL_CONFIG, RECOMMEND_CONFIG, MISC_CONFIG  # 导入配置参数
 
 
 class RecommenderSystem:

@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from transformers import AutoCon***REMOVED***g
+from transformers import AutoConfig
 import json
 from huggingface_hub import hf_hub_download
 
 def main():
     print("获取 Qwen2.5-0.5B 模型配置...")
     
-    # 使用AutoCon***REMOVED***g获取模型配置
-    con***REMOVED***g = AutoCon***REMOVED***g.from_pretrained("Qwen/Qwen2.5-0.5B", trust_remote_code=True)
+    # 使用AutoConfig获取模型配置
+    config = AutoConfig.from_pretrained("Qwen/Qwen2.5-0.5B", trust_remote_code=True)
     print("\n模型配置:")
-    print(con***REMOVED***g)
+    print(config)
     
     # 尝试下载并查看模型架构文件
     try:
         model_info_path = hf_hub_download(
             repo_id="Qwen/Qwen2.5-0.5B", 
-            ***REMOVED***lename="con***REMOVED***g.json"
+            filename="config.json"
         )
         
         with open(model_info_path, 'r') as f:

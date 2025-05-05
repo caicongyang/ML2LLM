@@ -4,7 +4,7 @@
 import os
 
 # 获取当前文件所在目录的绝对路径
-CURRENT_DIR = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 # 设置数据目录路径
 DATA_DIR = os.path.join(CURRENT_DIR, 'data')
 

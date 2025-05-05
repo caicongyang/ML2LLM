@@ -69,7 +69,7 @@ public class SimpleRNN {
         List<double[]> outputs = new ArrayList<>();
         
         // 重置状态
-        Arrays.***REMOVED***ll(hiddenState, 0);
+        Arrays.fill(hiddenState, 0);
         
         // 逐个处理序列元素
         for (double[] input : sequence) {

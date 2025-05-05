@@ -6,7 +6,7 @@ import os
 class MyDataset(Dataset):
     def __init__(self,split):
         #获取当前文件所在目录
-        current_dir = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+        current_dir = os.path.dirname(os.path.abspath(__file__))
         #使用相对路径加载数据
         data_path = os.path.join(current_dir, "data/ChnSentiCorp")
         #从磁盘加载数据

@@ -12,10 +12,10 @@ from sklearn.model_selection import train_test_split
 from models.recommender import NCFModel
 from utils.data_utils import load_data, split_data, create_data_loaders
 from utils.metrics import evaluate_recommender
-from con***REMOVED***g import MODEL_CONFIG, MISC_CONFIG, DATA_CONFIG
+from config import MODEL_CONFIG, MISC_CONFIG, DATA_CONFIG
 
 # 获取当前文件所在目录
-CURRENT_DIR = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 # 设置数据目录路径
 DATA_DIR = os.path.join(CURRENT_DIR, 'data')
 
@@ -136,7 +136,7 @@ def plot_results(metrics, pred_df, test_df):
         # 对于MacOS
         plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'Microsoft YaHei']
         # 对于Linux和Windows
-        if not any([font in plt.matplotlib.font_manager.***REMOVED***ndSystemFonts() for font in ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']]):
+        if not any([font in plt.matplotlib.font_manager.findSystemFonts() for font in ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']]):
             raise ValueError("No suitable Chinese font found")
         plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像时负号'-'显示为方块的问题
         use_chinese = True
@@ -145,7 +145,7 @@ def plot_results(metrics, pred_df, test_df):
         use_chinese = False
     
     # 创建一个3x2的图表布局
-    ***REMOVED***g, axes = plt.subplots(2, 2, ***REMOVED***gsize=(16, 12))
+    fig, axes = plt.subplots(2, 2, figsize=(16, 12))
     
     # 1. 评分分布图
     ax1 = axes[0, 0]
@@ -198,7 +198,7 @@ def plot_results(metrics, pred_df, test_df):
     plt.tight_layout(rect=[0, 0, 1, 0.97])
     
     # 保存图表
-    plt.save***REMOVED***g(os.path.join(plots_dir, 'evaluation_results.png'))
+    plt.savefig(os.path.join(plots_dir, 'evaluation_results.png'))
     print(f"评估结果图表已保存到: {os.path.join(plots_dir, 'evaluation_results.png')}")
     
     # 显示图表

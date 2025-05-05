@@ -31,7 +31,7 @@ plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'Microsoft YaHe
 plt.rcParams['axes.unicode_minus'] = False  # 解决图表中负号显示为方块的问题
 
 # 获取脚本所在目录的绝对路径，确保在任何环境中都能正确加载相关文件
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 # 将父目录添加到系统路径，以便导入其他模块
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
@@ -86,9 +86,9 @@ def load_model():
             return model
             
         # 如果找不到任何预期的模型文件，尝试查找其他可能的模型文件
-        model_***REMOVED***les = [f for f in os.listdir(get_absolute_path('data')) if f.startswith('best_model_') and f.endswith('.pkl')]
-        if model_***REMOVED***les:
-            model_path = get_absolute_path(f'data/{model_***REMOVED***les[0]}')
+        model_files = [f for f in os.listdir(get_absolute_path('data')) if f.startswith('best_model_') and f.endswith('.pkl')]
+        if model_files:
+            model_path = get_absolute_path(f'data/{model_files[0]}')
             model = joblib.load(model_path)
             print(f"成功加载模型: {model_path}")
             return model
@@ -198,7 +198,7 @@ def process_credit_application(application_data, model, transformers):
     dict: 包含以下字段的结果字典：
         - approved (bool): 是否批准申请
         - approval_probability (float): 批准的概率值(0-1)
-        - con***REMOVED***dence (float): 预测的置信度(0-1)
+        - confidence (float): 预测的置信度(0-1)
         - decision_factors (list): 影响决策的关键因素列表
         - suggestions (list): 给申请人的建议列表
     
@@ -274,7 +274,7 @@ def process_credit_application(application_data, model, transformers):
             probability = float(prediction)
         
         # 5. 计算置信度（预测的确定性程度）
-        con***REMOVED***dence = max(probability, 1 - probability)
+        confidence = max(probability, 1 - probability)
         
         # 6. 准备决策因素和建议
         decision_factors = []
@@ -326,7 +326,7 @@ def process_credit_application(application_data, model, transformers):
         return {
             'approved': prediction == 1,           # 是否批准
             'approval_probability': float(probability),  # 批准的概率
-            'con***REMOVED***dence': float(con***REMOVED***dence),       # 预测的置信度
+            'confidence': float(confidence),       # 预测的置信度
             'decision_factors': decision_factors,  # 决策因素列表
             'suggestions': suggestions             # 建议列表
         }
@@ -337,7 +337,7 @@ def process_credit_application(application_data, model, transformers):
         return {
             'approved': False,
             'approval_probability': 0.0,
-            'con***REMOVED***dence': 0.0,
+            'confidence': 0.0,
             'decision_factors': ["处理申请时出错"],
             'suggestions': ["请检查输入数据是否正确，然后重试"]
         }
@@ -758,15 +758,15 @@ def process_single_application(application_df, model, transformers, threshold=0.
         
         # 5. 使用阈值确定最终决策
         # 如果概率高于阈值则批准，否则拒绝
-        ***REMOVED***nal_prediction = 1 if probability >= threshold else 0
+        final_prediction = 1 if probability >= threshold else 0
         
         # 6. 获取预测解释和建议
-        explanation = explain_prediction(model, features_tuple, ***REMOVED***nal_prediction, probability)
+        explanation = explain_prediction(model, features_tuple, final_prediction, probability)
         
         # 7. 返回成功结果
         return {
             'success': True,               # 处理成功标志
-            'prediction': ***REMOVED***nal_prediction, # 最终预测结果
+            'prediction': final_prediction, # 最终预测结果
             'probability': float(probability), # 批准概率
             'explanation': explanation      # 解释和建议
         }

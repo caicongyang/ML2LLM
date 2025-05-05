@@ -15,11 +15,11 @@ import subprocess
 import shutil
 from typing import Optional, Union, List
 from huggingface_hub import HfApi, create_repo, login
-from transformers import AutoModelForCausalLM, AutoTokenizer, AutoCon***REMOVED***g
-from peft import PeftModel, PeftCon***REMOVED***g
+from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
+from peft import PeftModel, PeftConfig
 
 # 设置日志
-logging.basicCon***REMOVED***g(
+logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
@@ -95,7 +95,7 @@ def merge_lora_to_base_model(base_model_path: str, lora_model_path: str, output_
     logger.info(f"正在从 {base_model_path} 加载基础模型")
     
     # 加载配置
-    peft_con***REMOVED***g = PeftCon***REMOVED***g.from_pretrained(lora_model_path)
+    peft_config = PeftConfig.from_pretrained(lora_model_path)
     
     # 加载基础模型
     model = AutoModelForCausalLM.from_pretrained(
@@ -127,8 +127,8 @@ def merge_lora_to_base_model(base_model_path: str, lora_model_path: str, output_
     tokenizer.save_pretrained(output_dir)
     
     # 保存配置
-    con***REMOVED***g = AutoCon***REMOVED***g.from_pretrained(base_model_path, trust_remote_code=True)
-    con***REMOVED***g.save_pretrained(output_dir)
+    config = AutoConfig.from_pretrained(base_model_path, trust_remote_code=True)
+    config.save_pretrained(output_dir)
     
     return output_dir
 
@@ -190,7 +190,7 @@ def convert_to_gguf(model_path: str, output_dir: str, quantize: str) -> str:
         subprocess.run([
             "python3", "-m", "llama_cpp.convert_hf_to_gguf",
             "--model-dir", model_path,
-            "--out***REMOVED***le", gguf_path,
+            "--outfile", gguf_path,
             "--outtype", quantize
         ], check=True)
     except subprocess.CalledProcessError as e:
@@ -210,8 +210,8 @@ def create_ollama_model(gguf_path: str, model_name: str) -> None:
     """
     logger.info(f"正在创建 Ollama 模型: {model_name}")
     
-    # 创建 Model***REMOVED***le
-    model***REMOVED***le_content = f"""
+    # 创建 Modelfile
+    modelfile_content = f"""
 FROM {gguf_path}
 PARAMETER temperature 0.7
 PARAMETER top_p 0.9
@@ -222,15 +222,15 @@ PARAMETER stop "Assistant:"
 SYSTEM You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.
 """
     
-    model***REMOVED***le_path = os.path.join(os.path.dirname(gguf_path), "Model***REMOVED***le")
-    with open(model***REMOVED***le_path, "w") as f:
-        f.write(model***REMOVED***le_content)
+    modelfile_path = os.path.join(os.path.dirname(gguf_path), "Modelfile")
+    with open(modelfile_path, "w") as f:
+        f.write(modelfile_content)
     
     # 创建 Ollama 模型
     try:
         subprocess.run([
             "ollama", "create", model_name,
-            "-f", model***REMOVED***le_path
+            "-f", modelfile_path
         ], check=True)
         logger.info(f"Ollama 模型已创建: {model_name}")
         logger.info(f"现在您可以使用以下命令运行模型: ollama run {model_name}")

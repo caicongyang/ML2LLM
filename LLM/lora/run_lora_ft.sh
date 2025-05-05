@@ -1,4 +1,4 @@
-***REMOVED***
+#!/bin/bash
 
 # LoRA微调脚本 - 针对区块链安全专家数据集
 # 此脚本演示如何使用转换后的blockchain_peft.jsonl文件进行LoRA微调
@@ -15,7 +15,7 @@ OUTPUT_DIR="LLM/lora/output/blockchain-expert"  # 输出目录
 mkdir -p $OUTPUT_DIR
 
 # 运行微调脚本
-python LLM/lora/lora_***REMOVED***ne_tuning.py \
+python LLM/lora/lora_fine_tuning.py \
   --model_name_or_path $MODEL_NAME \
   --dataset_path $DATASET_PATH \
   --output_dir $OUTPUT_DIR \
@@ -35,4 +35,4 @@ python LLM/lora/lora_***REMOVED***ne_tuning.py \
   --save_steps 100 \
   --save_total_limit 3
 
-echo "LoRA微调完成! 模型保存在 $OUTPUT_DIR/***REMOVED***nal" 
+echo "LoRA微调完成! 模型保存在 $OUTPUT_DIR/final" 

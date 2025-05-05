@@ -22,17 +22,17 @@
 
 ```
 // 伪代码类比：卷积操作
-List<Double> applyFilter(double[][] image, double[][] ***REMOVED***lter) {
+List<Double> applyFilter(double[][] image, double[][] filter) {
     List<Double> features = new ArrayList<>();
     
     // 在图像上滑动过滤器
-    for (int i = 0; i < image.length - ***REMOVED***lter.length; i++) {
-        for (int j = 0; j < image[0].length - ***REMOVED***lter[0].length; j++) {
+    for (int i = 0; i < image.length - filter.length; i++) {
+        for (int j = 0; j < image[0].length - filter[0].length; j++) {
             // 计算当前位置的加权和
             double sum = 0;
-            for (int m = 0; m < ***REMOVED***lter.length; m++) {
-                for (int n = 0; n < ***REMOVED***lter[0].length; n++) {
-                    sum += image[i+m][j+n] * ***REMOVED***lter[m][n];
+            for (int m = 0; m < filter.length; m++) {
+                for (int n = 0; n < filter[0].length; n++) {
+                    sum += image[i+m][j+n] * filter[m][n];
                 }
             }
             features.add(sum);
@@ -130,13 +130,13 @@ public class CNNTrainer {
 ```java
 // Java方法链
 result = stream
-    .***REMOVED***lter(predicate1)
+    .filter(predicate1)
     .map(transformer)
     .collect(collector);
 
 // CNN前向传播类比
 output = input
-    .applyConvolution(***REMOVED***lters)
+    .applyConvolution(filters)
     .applyActivation(relu)
     .applyPooling(maxPool)
     .flatten()
@@ -182,15 +182,15 @@ Inception模块同时使用多个不同大小的卷积核并行处理输入。
 
 ### 图像分类
 
-**业务类比**：类似于实现一个`ImageClassi***REMOVED***er`接口的多个具体实现。
+**业务类比**：类似于实现一个`ImageClassifier`接口的多个具体实现。
 
 ```java
-public interface ImageClassi***REMOVED***er {
+public interface ImageClassifier {
     Category classify(BufferedImage image);
 }
 
 // CNN作为一个实现
-public class CNNImageClassi***REMOVED***er implements ImageClassi***REMOVED***er {
+public class CNNImageClassifier implements ImageClassifier {
     private CNN model;
     
     @Override

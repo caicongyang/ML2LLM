@@ -95,7 +95,7 @@ response = model.generate_text("您的提示文本")
 from peft import PeftModel
 
 # 先加载第一个适配器
-model = PeftModel.from_pretrained(base_model, "path/to/***REMOVED***rst_adapter")
+model = PeftModel.from_pretrained(base_model, "path/to/first_adapter")
 
 # 添加第二个适配器
 model.load_adapter("path/to/second_adapter", adapter_name="adapter2")
@@ -121,11 +121,11 @@ outputs = model.generate(...)
 **是的**，LoRA适配器可以与量化模型（如4-bit或8-bit）一起使用，这是减少内存占用的有效方法，特别适合推理部署：
 
 ```python
-from transformers import BitsAndBytesCon***REMOVED***g, AutoModelForCausalLM
+from transformers import BitsAndBytesConfig, AutoModelForCausalLM
 from peft import PeftModel
 
 # 配置量化
-quantization_con***REMOVED***g = BitsAndBytesCon***REMOVED***g(
+quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_compute_dtype=torch.float16
 )
@@ -133,7 +133,7 @@ quantization_con***REMOVED***g = BitsAndBytesCon***REMOVED***g(
 # 加载量化的基础模型
 base_model = AutoModelForCausalLM.from_pretrained(
     "meta-llama/Llama-2-7b-hf",
-    quantization_con***REMOVED***g=quantization_con***REMOVED***g,
+    quantization_config=quantization_config,
     device_map="auto"
 )
 
@@ -149,11 +149,11 @@ model = PeftModel.from_pretrained(base_model, "path/to/lora_adapter")
 
 ### 使用的主要框架
 
-我们的`lora_***REMOVED***ne_tuning.py`脚本主要基于以下框架和库：
+我们的`lora_fine_tuning.py`脚本主要基于以下框架和库：
 
 1. **Hugging Face生态系统**：
    - **Transformers**：提供基础模型加载、分词器和训练工具
-   - **PEFT（Parameter-Ef***REMOVED***cient Fine-Tuning）**：提供LoRA实现和适配器管理
+   - **PEFT（Parameter-Efficient Fine-Tuning）**：提供LoRA实现和适配器管理
    - **Datasets**：数据集处理
    - **Accelerate**：分布式训练支持
 
@@ -209,7 +209,7 @@ model = PeftModel.from_pretrained(base_model, "path/to/lora_adapter")
 
 ## 我们的LoRA微调脚本支持哪些数据集格式？
 
-我们的`lora_***REMOVED***ne_tuning.py`脚本支持以下几种数据集格式：
+我们的`lora_fine_tuning.py`脚本支持以下几种数据集格式：
 
 ### 1. JSON格式数据集
 
@@ -230,7 +230,7 @@ JSON格式是最常用的数据集格式之一，脚本默认查找名为"text"�
 
 **使用方法：**
 ```bash
-python lora_***REMOVED***ne_tuning.py \
+python lora_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-7b-hf" \
   --dataset_path "your_dataset.json" \
   --text_column "text" \
@@ -251,7 +251,7 @@ text
 
 **使用方法：**
 ```bash
-python lora_***REMOVED***ne_tuning.py \
+python lora_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-7b-hf" \
   --dataset_path "your_dataset.csv" \
   --text_column "text" \
@@ -264,7 +264,7 @@ python lora_***REMOVED***ne_tuning.py \
 
 **使用方法：**
 ```bash
-python lora_***REMOVED***ne_tuning.py \
+python lora_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-7b-hf" \
   --dataset_path "dataset_owner/dataset_name" \
   --text_column "text" \
@@ -290,8 +290,8 @@ python lora_***REMOVED***ne_tuning.py \
 ```python
 import json
 
-def convert_to_text_format(input_***REMOVED***le, output_***REMOVED***le):
-    with open(input_***REMOVED***le, 'r', encoding='utf-8') as f:
+def convert_to_text_format(input_file, output_file):
+    with open(input_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
     result = []
@@ -304,7 +304,7 @@ def convert_to_text_format(input_***REMOVED***le, output_***REMOVED***le):
         
         result.append({"text": text})
     
-    with open(output_***REMOVED***le, 'w', encoding='utf-8') as f:
+    with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
 # 使用示例
@@ -332,8 +332,8 @@ convert_to_text_format("alpaca_data.json", "training_data.json")
 ```python
 import json
 
-def convert_conversations(input_***REMOVED***le, output_***REMOVED***le):
-    with open(input_***REMOVED***le, 'r', encoding='utf-8') as f:
+def convert_conversations(input_file, output_file):
+    with open(input_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
     result = []
@@ -351,7 +351,7 @@ def convert_conversations(input_***REMOVED***le, output_***REMOVED***le):
         
         result.append({"text": conversation.strip()})
     
-    with open(output_***REMOVED***le, 'w', encoding='utf-8') as f:
+    with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
 
 # 使用示例
@@ -365,7 +365,7 @@ convert_conversations("conversations.json", "training_data.json")
 3. **数据平衡**：如果有多种类型的样本，确保数据集中各类样本分布平衡
 4. **验证集**：建议从数据集中分离出一部分作为验证集（脚本会自动处理，除非数据集已有验证集）
 
-通过这些格式和预处理步骤，`lora_***REMOVED***ne_tuning.py`脚本可以适应多种数据集类型，包括指令微调和对话微调场景。
+通过这些格式和预处理步骤，`lora_fine_tuning.py`脚本可以适应多种数据集类型，包括指令微调和对话微调场景。
 
 ## 如何将合并后的模型推送到Hugging Face Hub？
 
@@ -380,11 +380,11 @@ convert_conversations("conversations.json", "training_data.json")
    - SafeTensors格式: `model.safetensors` 或分片文件（推荐，更安全）
 
 2. **模型配置文件**：
-   - `con***REMOVED***g.json` - 包含模型架构和超参数
+   - `config.json` - 包含模型架构和超参数
 
 3. **分词器文件**：
    - `tokenizer.json`
-   - `tokenizer_con***REMOVED***g.json`
+   - `tokenizer_config.json`
    - `special_tokens_map.json`
    - `vocab.json`（对于某些分词器）
    - `merges.txt`（对于一些基于BPE的分词器）
@@ -458,8 +458,8 @@ convert_conversations("conversations.json", "training_data.json")
    # 如果需要创建或更新README
    from huggingface_hub import HfApi
    api = HfApi()
-   api.upload_***REMOVED***le(
-       path_or_***REMOVED***leobj=model_card.encode(),
+   api.upload_file(
+       path_or_fileobj=model_card.encode(),
        path_in_repo="README.md",
        repo_id=repo_id,
        commit_message="Upload model card"
@@ -521,7 +521,7 @@ api.upload_folder(
 
 ## 如何将合并后的模型推送到Ollama？
 
-[Ollama](https://ollama.ai/) 是一个流行的本地LLM运行环境，可以轻松地在本地部署和运行各种开源模型。将LoRA合并后的模型部署到Ollama需要创建一个自定义的Model***REMOVED***le并进行注册。
+[Ollama](https://ollama.ai/) 是一个流行的本地LLM运行环境，可以轻松地在本地部署和运行各种开源模型。将LoRA合并后的模型部署到Ollama需要创建一个自定义的Modelfile并进行注册。
 
 ### 步骤1: 准备模型文件
 
@@ -533,9 +533,9 @@ python merge_lora.py --base_model_path "meta-llama/Llama-2-7b-hf" \
                      --output_path "./merged_model"
 ```
 
-### 步骤2: 创建Model***REMOVED***le
+### 步骤2: 创建Modelfile
 
-Ollama使用称为Model***REMOVED***le的配置文件来定义模型。创建一个名为`Model***REMOVED***le`（无文件扩展名）的文件，并添加以下内容：
+Ollama使用称为Modelfile的配置文件来定义模型。创建一个名为`Modelfile`（无文件扩展名）的文件，并添加以下内容：
 
 ```
 FROM llama2
@@ -569,20 +569,20 @@ make
 
 2. 转换模型（对于PyTorch模型）：
 ```bash
-python convert.py /path/to/your/merged_model --outtype f16 --out***REMOVED***le model_ggml.bin
+python convert.py /path/to/your/merged_model --outtype f16 --outfile model_ggml.bin
 ```
 
 3. 对于较新版本，可能需要使用convert-hf-to-gguf.py：
 ```bash
-python convert-hf-to-gguf.py /path/to/your/merged_model --out***REMOVED***le model.gguf
+python convert-hf-to-gguf.py /path/to/your/merged_model --outfile model.gguf
 ```
 
 ### 步骤4: 使用Ollama创建模型
 
-将转换后的模型文件放在与Model***REMOVED***le相同的目录中，然后运行：
+将转换后的模型文件放在与Modelfile相同的目录中，然后运行：
 
 ```bash
-ollama create my-custom-model -f /path/to/Model***REMOVED***le
+ollama create my-custom-model -f /path/to/Modelfile
 ```
 
 这将注册您的模型，使其可以在Ollama中使用。
@@ -623,22 +623,22 @@ ollama push username/modelname:tag
 
 2. **如何调整模型生成参数？**
    
-   在Model***REMOVED***le中使用PARAMETER指令设置默认参数，如temperature、top_p等。
+   在Modelfile中使用PARAMETER指令设置默认参数，如temperature、top_p等。
 
 3. **如何处理大型模型的内存限制？**
    
-   Ollama支持模型量化。您可以在Model***REMOVED***le中指定量化参数：
+   Ollama支持模型量化。您可以在Modelfile中指定量化参数：
    ```
    QUANTIZE q4_0
    ```
    
 4. **如何添加自定义系统提示？**
    
-   使用SYSTEM指令在Model***REMOVED***le中定义系统提示。
+   使用SYSTEM指令在Modelfile中定义系统提示。
 
 5. **如何分享我的模型？**
    
-   您可以分享整个转换后的GGUF文件和Model***REMOVED***le，或使用`ollama push`命令创建一个可分发的包。
+   您可以分享整个转换后的GGUF文件和Modelfile，或使用`ollama push`命令创建一个可分发的包。
 
 与Hugging Face Hub不同，Ollama更专注于本地部署和优化的推理体验，非常适合在个人设备上运行微调后的模型。
 
@@ -791,15 +791,15 @@ def evaluate_lora_parameters(base_model_path, dataset, ranks=[4, 8, 16, 32], alp
     for rank in ranks:
         for alpha in alphas:
             # 训练特定参数的LoRA模型
-            con***REMOVED***g = f"rank_{rank}_alpha_{alpha}"
+            config = f"rank_{rank}_alpha_{alpha}"
             # ... 训练代码 ...
             
             # 评估性能
             perplexity = calculate_perplexity(model, tokenizer, test_texts)
-            results[con***REMOVED***g] = perplexity
+            results[config] = perplexity
     
     # 可视化结果
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     # ... 绘图代码 ...
     
     return results
@@ -827,7 +827,7 @@ def evaluate_lora_parameters(base_model_path, dataset, ranks=[4, 8, 16, 32], alp
 
 ### 详细解释
 
-在使用我们的`lora_***REMOVED***ne_tuning.py`脚本对Qwen2.5-0.5B-Instruct进行LoRA微调时，模型和分词器文件会在首次运行过程中自动下载并缓存：
+在使用我们的`lora_fine_tuning.py`脚本对Qwen2.5-0.5B-Instruct进行LoRA微调时，模型和分词器文件会在首次运行过程中自动下载并缓存：
 
 1. **自动下载机制**：Hugging Face的`transformers`库会自动处理模型下载
    - 模型文件会被缓存到本地（通常在`~/.cache/huggingface/`目录）
@@ -840,7 +840,7 @@ def evaluate_lora_parameters(base_model_path, dataset, ranks=[4, 8, 16, 32], alp
 3. **使用示例**：
 
 ```bash
-python LLM/lora/lora_***REMOVED***ne_tuning.py \
+python LLM/lora/lora_fine_tuning.py \
   --model_name_or_path "Qwen/Qwen2.5-0.5B-Instruct" \
   --dataset_path "您的数据集路径" \
   --output_dir "./lora-qwen2.5-output" \
@@ -874,7 +874,7 @@ tokenizer.save_pretrained("./local_model_directory")
 2. **使用本地模型路径**：
 
 ```bash
-python LLM/lora/lora_***REMOVED***ne_tuning.py \
+python LLM/lora/lora_fine_tuning.py \
   --model_name_or_path "./local_model_directory" \
   --dataset_path "您的数据集路径" \
   --output_dir "./lora-qwen2.5-output" \
@@ -901,7 +901,7 @@ q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj
 对于显存有限的环境，您可以使用量化技术减少内存占用：
 
 ```bash
-python LLM/lora/lora_***REMOVED***ne_tuning.py \
+python LLM/lora/lora_fine_tuning.py \
   --model_name_or_path "Qwen/Qwen2.5-0.5B-Instruct" \
   --dataset_path "您的数据集路径" \
   --output_dir "./lora-qwen2.5-output" \
@@ -913,7 +913,7 @@ python LLM/lora/lora_***REMOVED***ne_tuning.py \
 对于更极端的内存限制，可以使用4位量化：
 
 ```bash
-python LLM/lora/lora_***REMOVED***ne_tuning.py \
+python LLM/lora/lora_fine_tuning.py \
   --model_name_or_path "Qwen/Qwen2.5-0.5B-Instruct" \
   --dataset_path "您的数据集路径" \
   --output_dir "./lora-qwen2.5-output" \

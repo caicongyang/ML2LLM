@@ -16,8 +16,8 @@ from torch.utils.data import DataLoader  # 从PyTorch导入数据加载器
 # 导入自定义模块
 from data_utils import load_cifar10, get_data_loaders  # 导入数据处理工具
 from models import get_model  # 导入模型获取函数
-from train import train_classi***REMOVED***er, train_autoencoder  # 导入训练函数
-from evaluate import evaluate_classi***REMOVED***er, evaluate_autoencoder  # 导入评估函数
+from train import train_classifier, train_autoencoder  # 导入训练函数
+from evaluate import evaluate_classifier, evaluate_autoencoder  # 导入评估函数
 from visualize import (  # 导入可视化相关函数
     plot_training_history,  # 绘制训练历史曲线
     visualize_predictions,  # 可视化模型预测结果
@@ -122,7 +122,7 @@ def train_and_evaluate(args):  # 定义训练和评估函数
                 args=train_args  # 传入训练参数
             )
         else:
-            history = train_classi***REMOVED***er(  # 调用分类器训练函数
+            history = train_classifier(  # 调用分类器训练函数
                 model=model,  # 传入模型
                 train_loader=train_loader,  # 传入训练数据加载器
                 val_loader=val_loader,  # 传入验证数据加载器
@@ -167,14 +167,14 @@ def train_and_evaluate(args):  # 定义训练和评估函数
         print(f"测试集平均重建误差: {metrics['mean_error']:.4f}")  # 打印平均重建误差
     else:
         # 移除不支持的参数
-        metrics = evaluate_classi***REMOVED***er(  # 调用分类器评估函数
+        metrics = evaluate_classifier(  # 调用分类器评估函数
             model=model,  # 传入模型
             test_loader=test_loader,  # 传入测试数据加载器
             device=device  # 传入计算设备
         )
         
         # 使用metrics中的数据绘制混淆矩阵和打印分类报告
-        from evaluate import plot_confusion_matrix, print_classi***REMOVED***cation_report  # 导入混淆矩阵和分类报告函数
+        from evaluate import plot_confusion_matrix, print_classification_report  # 导入混淆矩阵和分类报告函数
         
         plot_confusion_matrix(  # 绘制混淆矩阵
             metrics['all_targets'],  # 传入真实标签
@@ -183,7 +183,7 @@ def train_and_evaluate(args):  # 定义训练和评估函数
             save_path=os.path.join(model_results_dir, 'confusion_matrix.png')  # 设置保存路径
         )
         
-        print_classi***REMOVED***cation_report(  # 打印分类报告
+        print_classification_report(  # 打印分类报告
             metrics['all_targets'],  # 传入真实标签
             metrics['all_preds'],  # 传入预测标签
             class_names  # 传入类别名称
@@ -249,7 +249,7 @@ def train_and_evaluate(args):  # 定义训练和评估函数
 def main():  # 定义主函数
     """主函数"""
     # 获取当前脚本所在目录的上一级目录(auto-vision)
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))  # 获取项目根目录路径
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # 获取项目根目录路径
     
     parser = argparse.ArgumentParser(description='深度学习模型训练、评估与可视化演示')  # 创建命令行参数解析器
     

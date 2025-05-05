@@ -5,10 +5,10 @@
 数据格式转换脚本：将对话格式的JSONL文件转换为PEFT支持的格式
 
 本脚本将包含多轮对话的JSONL文件转换为PEFT微调所需的格式。
-转换后的数据可直接用于lora_***REMOVED***ne_tuning.py脚本进行LoRA微调。
+转换后的数据可直接用于lora_fine_tuning.py脚本进行LoRA微调。
 
 用法:
-    python convert_to_peft_format.py --input_***REMOVED***le <输入JSONL文件> --output_***REMOVED***le <输出文件> 
+    python convert_to_peft_format.py --input_file <输入JSONL文件> --output_file <输出文件> 
     [--system_template <系统消息模板>] [--conversation_template <对话模板>]
 
 作者: ML2LLM 团队
@@ -23,9 +23,9 @@ def parse_args():
     """解析命令行参数"""
     parser = argparse.ArgumentParser(description="将对话JSONL转换为PEFT支持的格式")
     
-    parser.add_argument("--input_***REMOVED***le", type=str, required=True,
+    parser.add_argument("--input_file", type=str, required=True,
                         help="输入的JSONL文件路径，包含对话数据")
-    parser.add_argument("--output_***REMOVED***le", type=str, required=True,
+    parser.add_argument("--output_file", type=str, required=True,
                         help="输出文件的路径，格式为JSONL")
     parser.add_argument("--system_template", type=str, default="<|system|>\n{system_content}\n",
                         help="系统消息的模板格式")
@@ -40,18 +40,18 @@ def parse_args():
     
     return parser.parse_args()
 
-def read_jsonl(***REMOVED***le_path: str) -> List[Dict[str, Any]]:
+def read_jsonl(file_path: str) -> List[Dict[str, Any]]:
     """
     读取JSONL文件
     
     参数:
-        ***REMOVED***le_path: JSONL文件路径
+        file_path: JSONL文件路径
         
     返回:
         包含JSON对象的列表
     """
     data = []
-    with open(***REMOVED***le_path, 'r', encoding='utf-8') as f:
+    with open(file_path, 'r', encoding='utf-8') as f:
         for line in f:
             if line.strip():  # 跳过空行
                 try:
@@ -155,17 +155,17 @@ def convert_to_peft_format(input_data: List[Dict[str, Any]], system_template: st
     
     return peft_data
 
-def write_jsonl(data: List[Dict[str, str]], ***REMOVED***le_path: str):
+def write_jsonl(data: List[Dict[str, str]], file_path: str):
     """
     将数据写入JSONL文件
     
     参数:
         data: 要写入的数据列表
-        ***REMOVED***le_path: 输出文件路径
+        file_path: 输出文件路径
     """
-    os.makedirs(os.path.dirname(os.path.abspath(***REMOVED***le_path)), exist_ok=True)
+    os.makedirs(os.path.dirname(os.path.abspath(file_path)), exist_ok=True)
     
-    with open(***REMOVED***le_path, 'w', encoding='utf-8') as f:
+    with open(file_path, 'w', encoding='utf-8') as f:
         for item in data:
             f.write(json.dumps(item, ensure_ascii=False) + '\n')
 
@@ -173,8 +173,8 @@ def main():
     """主函数"""
     args = parse_args()
     
-    print(f"正在读取输入文件: {args.input_***REMOVED***le}")
-    input_data = read_jsonl(args.input_***REMOVED***le)
+    print(f"正在读取输入文件: {args.input_file}")
+    input_data = read_jsonl(args.input_file)
     print(f"已加载 {len(input_data)} 条对话")
     
     print("正在转换为PEFT格式...")
@@ -187,11 +187,11 @@ def main():
         args.conversation_template
     )
     
-    print(f"正在写入输出文件: {args.output_***REMOVED***le}")
-    write_jsonl(peft_data, args.output_***REMOVED***le)
+    print(f"正在写入输出文件: {args.output_file}")
+    write_jsonl(peft_data, args.output_file)
     
     print(f"转换完成！转换了 {len(peft_data)} 条对话到PEFT格式")
-    print(f"输出文件路径: {args.output_***REMOVED***le}")
+    print(f"输出文件路径: {args.output_file}")
     
     # 显示示例
     if peft_data:

@@ -455,7 +455,7 @@ for episode in range(n_episodes):
     epsilon = max(0.01, epsilon * 0.995)
 
 # 绘制学习曲线（每100回合的平均奖励）
-plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+plt.figure(figsize=(10, 6))
 episode_groups = np.split(np.array(rewards), n_episodes // 100)
 averages = [np.mean(group) for group in episode_groups]
 plt.plot(np.arange(len(averages)) * 100, averages)
@@ -556,8 +556,8 @@ loss = (r + γ·max_a' Q_target(s',a') - Q(s,a))²
 
 ```java
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
-import org.deeplearning4j.nn.conf.MultiLayerCon***REMOVED***guration;
-import org.deeplearning4j.nn.conf.NeuralNetCon***REMOVED***guration;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -567,7 +567,7 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.con***REMOVED***g.Adam;
+import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.ArrayList;
@@ -638,7 +638,7 @@ public class DQN {
 
     // 创建神经网络
     private MultiLayerNetwork createNetwork() {
-        MultiLayerCon***REMOVED***guration conf = new NeuralNetCon***REMOVED***guration.Builder()
+        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(123)
                 .weightInit(WeightInit.XAVIER)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
@@ -730,7 +730,7 @@ public class DQN {
         }
         
         // 训练网络
-        qNetwork.***REMOVED***t(new DataSet(inputStates, targets));
+        qNetwork.fit(new DataSet(inputStates, targets));
         
         // 更新计数器
         updateCounter++;
@@ -893,7 +893,7 @@ class DQNAgent:
             targets[i] = target
         
         # 训练模型
-        self.model.***REMOVED***t(states, targets, epochs=1, verbose=0)
+        self.model.fit(states, targets, epochs=1, verbose=0)
         
         # 衰减探索率
         if self.epsilon > self.epsilon_min:
@@ -1031,8 +1031,8 @@ Actor-Critic结合了策略梯度(Actor)和值函数近似(Critic)的优点：
 
 ```java
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
-import org.deeplearning4j.nn.conf.MultiLayerCon***REMOVED***guration;
-import org.deeplearning4j.nn.conf.NeuralNetCon***REMOVED***guration;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -1042,7 +1042,7 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.con***REMOVED***g.Adam;
+import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.nd4j.linalg.ops.transforms.Transforms;
 
@@ -1096,7 +1096,7 @@ public class REINFORCE {
 
     // 创建策略网络
     private MultiLayerNetwork createPolicyNetwork() {
-        MultiLayerCon***REMOVED***guration conf = new NeuralNetCon***REMOVED***guration.Builder()
+        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
                 .seed(123)
                 .weightInit(WeightInit.XAVIER)
                 .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
@@ -1200,7 +1200,7 @@ public class REINFORCE {
         }
         
         // 训练策略网络
-        policyNetwork.***REMOVED***t(new DataSet(inputStates, targets));
+        policyNetwork.fit(new DataSet(inputStates, targets));
     }
     
     // 运行一个回合
@@ -1403,7 +1403,7 @@ class PPO:
             batch_states = np.array([states[i] for i in indices])
             batch_returns = np.array([returns[i] for i in indices])
             
-            self.value_net.***REMOVED***t(batch_states, batch_returns, verbose=0)
+            self.value_net.fit(batch_states, batch_returns, verbose=0)
 
 # 使用示例（CartPole环境）
 env = gym.make('CartPole-v1')
@@ -1652,12 +1652,12 @@ public class RecommendationSystemExample {
     // 使用强化学习的推荐系统
     public static class RLRecommender {
         private DQNAgent agent;
-        private UserPro***REMOVED***ler pro***REMOVED***ler;
+        private UserProfiler profiler;
         private ItemCatalog catalog;
         
         public RLRecommender(ItemCatalog catalog) {
             this.catalog = catalog;
-            this.pro***REMOVED***ler = new UserPro***REMOVED***ler();
+            this.profiler = new UserProfiler();
             
             // 状态空间：用户特征 + 上下文特征
             int stateSize = 100;
@@ -1694,12 +1694,12 @@ public class RecommendationSystemExample {
             agent.update(state, action, reward);
             
             // 更新用户资料
-            pro***REMOVED***ler.updatePro***REMOVED***le(user, item, feedback);
+            profiler.updateProfile(user, item, feedback);
         }
         
         private double[] buildState(User user, Context context) {
             // 组合用户特征和上下文特征
-            double[] userFeatures = pro***REMOVED***ler.getUserFeatures(user);
+            double[] userFeatures = profiler.getUserFeatures(user);
             double[] contextFeatures = context.getFeatures();
             
             double[] state = new double[userFeatures.length + contextFeatures.length];
@@ -1739,9 +1739,9 @@ public class RecommendationSystemExample {
         private enum FeedbackType { 
             CLICK, VIEW_DETAILS, ADD_TO_CART, PURCHASE, EXPLICIT_RATING
         }
-        private static class UserPro***REMOVED***ler {
+        private static class UserProfiler {
             public double[] getUserFeatures(User user) { /* ... */ return new double[80]; }
-            public void updatePro***REMOVED***le(User user, Item item, UserFeedback feedback) { /* ... */ }
+            public void updateProfile(User user, Item item, UserFeedback feedback) { /* ... */ }
         }
         private static class ItemCatalog {
             public int size() { /* ... */ return 1000; }

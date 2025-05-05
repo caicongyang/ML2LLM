@@ -1,7 +1,7 @@
 {
   "builder_name": "chn_senti_corp",
   "citation": "",
-  "con***REMOVED***g_name": "default",
+  "config_name": "default",
   "dataset_size": 3871919,
   "description": "",
   "download_checksums": {

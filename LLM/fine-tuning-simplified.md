@@ -97,7 +97,7 @@
 - 简单分类或问答任务
 - 希望保留模型通用能力
 
-### 5. Pre***REMOVED***x-Tuning（前缀调整）
+### 5. Prefix-Tuning（前缀调整）
 
 **通俗理解**：在输入前面添加一些特殊标记，这些标记会根据特定任务进行优化。就像给医生一段特殊的开场白，这段话能引导他进入专业状态。
 
@@ -172,11 +172,11 @@
 2. **数据量**：
    - 数据充足：全参数微调、RLHF
    - 数据有限：LoRA、QLoRA
-   - 数据很少：P-Tuning、Pre***REMOVED***x-Tuning
+   - 数据很少：P-Tuning、Prefix-Tuning
 
 3. **任务类型**：
    - 通用对话：RLHF
-   - 文本生成：Pre***REMOVED***x-Tuning、LoRA
+   - 文本生成：Prefix-Tuning、LoRA
    - 分类任务：Adapter Tuning、P-Tuning
 
 4. **性能要求**：
@@ -204,7 +204,7 @@
 | LoRA | 0.1%-1% | 中等 | 快 | 良好 | 中等 |
 | QLoRA | 0.1%-1% | 低 | 中等 | 良好 | 中等 |
 | P-Tuning | <0.1% | 很低 | 很快 | 中等 | 中等 |
-| Pre***REMOVED***x-Tuning | <1% | 低 | 快 | 中等 | 复杂 |
+| Prefix-Tuning | <1% | 低 | 快 | 中等 | 复杂 |
 | Adapter Tuning | 1%-5% | 中等 | 中等 | 良好 | 复杂 |
 | RLHF | 变化大 | 非常高 | 非常慢 | 优秀 | 非常复杂 |
 
@@ -219,7 +219,7 @@
 - [Hugging Face PEFT文档](https://huggingface.co/docs/peft/index)
 - [LLaMA-Factory项目](https://github.com/hiyouga/LLaMA-Factory)
 - [FastChat项目](https://github.com/lm-sys/FastChat)
-- [DeepLearning.AI微调课程](https://www.deeplearning.ai/short-courses/***REMOVED***netuning-large-language-models/)
+- [DeepLearning.AI微调课程](https://www.deeplearning.ai/short-courses/finetuning-large-language-models/)
 
 ---
 

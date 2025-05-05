@@ -1,8 +1,8 @@
-***REMOVED***
+#!/bin/bash
 
 # 导出 LoRA 微调模型的示例脚本
 # 此脚本展示了使用 export_lora_model.py 工具的不同方式
-# Example script for exporting LoRA ***REMOVED***ne-tuned models
+# Example script for exporting LoRA fine-tuned models
 # This script shows different ways to use the export_lora_model.py utility
 
 # 设置模型路径

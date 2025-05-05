@@ -14,13 +14,13 @@ import matplotlib.pyplot as plt
 
 # 添加上级目录到系统路径，以便导入自定义模块
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # 导入自定义的推荐系统模型
-from models.recommender import NCFModel, Simpli***REMOVED***edNCF
+from models.recommender import NCFModel, SimplifiedNCF
 # 导入数据处理工具函数
 from utils.data_utils import load_data, split_data, create_data_loaders, negative_sampling
 # 导入配置文件中的参数设置
-from con***REMOVED***g import DATA_CONFIG, MODEL_CONFIG, MISC_CONFIG
+from config import DATA_CONFIG, MODEL_CONFIG, MISC_CONFIG
 
 
 def train_epoch(model, train_loader, optimizer, criterion, device):
@@ -186,7 +186,7 @@ def plot_training_history(train_losses, val_losses, metrics, save_dir='./models'
         # 对于MacOS系统的中文字体设置
         plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'Microsoft YaHei']
         # 对于Linux和Windows系统，检查中文字体是否可用
-        if not any([font in fm.***REMOVED***ndSystemFonts() for font in ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']]):
+        if not any([font in fm.findSystemFonts() for font in ['SimHei', 'Microsoft YaHei', 'Arial Unicode MS']]):
             raise ValueError("No suitable Chinese font found")
         # 解决保存图像时负号'-'显示为方块的问题
         plt.rcParams['axes.unicode_minus'] = False
@@ -200,7 +200,7 @@ def plot_training_history(train_losses, val_losses, metrics, save_dir='./models'
     epochs = range(1, len(train_losses) + 1)
     
     # 创建包含两个子图的图表，用于展示损失和评估指标
-    ***REMOVED***g, (ax1, ax2) = plt.subplots(1, 2, ***REMOVED***gsize=(15, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
     
     # 绘制损失曲线子图
     ax1.plot(epochs, train_losses, 'b-', label='Training Loss' if not use_chinese else '训练损失')
@@ -225,7 +225,7 @@ def plot_training_history(train_losses, val_losses, metrics, save_dir='./models'
     # 调整布局确保图表美观
     plt.tight_layout()
     # 保存图表到文件
-    plt.save***REMOVED***g(os.path.join(save_dir, 'training_history.png'))
+    plt.savefig(os.path.join(save_dir, 'training_history.png'))
     # 关闭图表释放资源
     plt.close()
 
@@ -247,7 +247,7 @@ def train_model():
     print(f"使用设备: {device}")
     
     # 设置模型和图表保存路径 - 基于脚本位置动态确定
-    save_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__))), 'data')
+    save_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
     model_save_path = os.path.join(save_dir, 'recommender_model.pth')
     
     # 加载用户-商品评分数据和元数据

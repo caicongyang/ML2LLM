@@ -8,8 +8,8 @@ from scipy.stats import norm
 
 # 添加项目根目录到路径
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__))))
-from con***REMOVED***g import DATA_CONFIG
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from config import DATA_CONFIG
 
 
 def generate_user_data(num_users=1000):
@@ -211,5 +211,5 @@ def generate_and_save_data(output_dir='./'):
 
 if __name__ == "__main__":
     # 保存到脚本所在目录
-    script_dir = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     generate_and_save_data(script_dir) 

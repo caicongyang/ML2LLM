@@ -120,17 +120,17 @@ X = df[features]
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 确定最佳簇数量(可选)
 wcss = []
 for i in range(1, 11):
     kmeans = KMeans(n_clusters=i, init='k-means++', max_iter=300, n_init=10, random_state=42)
-    kmeans.***REMOVED***t(X_scaled)
+    kmeans.fit(X_scaled)
     wcss.append(kmeans.inertia_)
 
 # 绘制肘部图表
-plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+plt.figure(figsize=(10, 6))
 plt.plot(range(1, 11), wcss, marker='o', linestyle='-')
 plt.title('使用肘部方法找到最佳的K值')
 plt.xlabel('簇的数量')
@@ -139,7 +139,7 @@ plt.show()
 
 # 创建K-means模型
 kmeans = KMeans(n_clusters=4, init='k-means++', max_iter=300, n_init=10, random_state=42)
-clusters = kmeans.***REMOVED***t_predict(X_scaled)
+clusters = kmeans.fit_predict(X_scaled)
 
 # 添加簇标签到原始数据
 df['cluster'] = clusters
@@ -247,11 +247,11 @@ X = df[features]
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 创建层次聚类模型
-hc = AgglomerativeClustering(n_clusters=4, af***REMOVED***nity='euclidean', linkage='ward')
-clusters = hc.***REMOVED***t_predict(X_scaled)
+hc = AgglomerativeClustering(n_clusters=4, affinity='euclidean', linkage='ward')
+clusters = hc.fit_predict(X_scaled)
 
 # 添加簇标签到原始数据
 df['cluster'] = clusters
@@ -259,7 +259,7 @@ df['cluster'] = clusters
 # 创建树状图
 linked = linkage(X_scaled, method='ward')
 
-plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+plt.figure(figsize=(12, 8))
 dendrogram(linked, orientation='top', distance_sort='descending', show_leaf_counts=True)
 plt.title('客户分群的层次聚类树状图')
 plt.xlabel('客户索引')
@@ -364,11 +364,11 @@ X = df[features]
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 创建DBSCAN模型
 dbscan = DBSCAN(eps=0.5, min_samples=5)
-clusters = dbscan.***REMOVED***t_predict(X_scaled)
+clusters = dbscan.fit_predict(X_scaled)
 
 # 添加簇标签到原始数据
 df['cluster'] = clusters
@@ -381,7 +381,7 @@ print(f'估计的噪声点数量: {n_noise}')
 
 # 可视化结果 (如果特征是2D的)
 if X.shape[1] == 2:
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     
     # 绘制聚类结果
     unique_labels = set(clusters)
@@ -490,11 +490,11 @@ X = df[features]
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 创建GMM模型
 gmm = GaussianMixture(n_components=4, covariance_type='full', random_state=42)
-gmm.***REMOVED***t(X_scaled)
+gmm.fit(X_scaled)
 
 # 获取簇标签和概率
 clusters = gmm.predict(X_scaled)
@@ -505,7 +505,7 @@ df['cluster'] = clusters
 
 # 可视化结果 (如果特征是2D的)
 if X.shape[1] == 2:
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+    plt.figure(figsize=(10, 8))
     
     # 创建网格
     x = np.linspace(X_scaled[:, 0].min() - 1, X_scaled[:, 0].max() + 1, 100)
@@ -563,8 +563,8 @@ Java实现 (使用Weka):
 import weka.attributeSelection.PrincipalComponents;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.***REMOVED***lters.Filter;
-import weka.***REMOVED***lters.unsupervised.attribute.Remove;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Remove;
 
 public class PCAForCustomerSegmentation {
     public static void main(String[] args) throws Exception {
@@ -622,18 +622,18 @@ X = df[features]
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 创建PCA模型
 pca = PCA()
-X_pca = pca.***REMOVED***t_transform(X_scaled)
+X_pca = pca.fit_transform(X_scaled)
 
 # 查看解释方差比
 explained_variance = pca.explained_variance_ratio_
 cumulative_variance = np.cumsum(explained_variance)
 
 # 绘制方差解释图
-plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+plt.figure(figsize=(10, 6))
 plt.bar(range(1, len(explained_variance) + 1), explained_variance, alpha=0.5, color='blue')
 plt.step(range(1, len(cumulative_variance) + 1), cumulative_variance, where='mid', color='red')
 plt.axhline(y=0.95, linestyle='--', color='green')
@@ -648,11 +648,11 @@ print(f"保留95%方差所需的主成分数量: {n_components}")
 
 # 使用选定的主成分数量降维
 pca = PCA(n_components=n_components)
-X_pca_reduced = pca.***REMOVED***t_transform(X_scaled)
+X_pca_reduced = pca.fit_transform(X_scaled)
 
 # 如果降到2维，可以可视化
 if X_pca_reduced.shape[1] >= 2:
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     plt.scatter(X_pca_reduced[:, 0], X_pca_reduced[:, 1], alpha=0.5)
     plt.title('客户数据的PCA降维可视化 (前两个主成分)')
     plt.xlabel('主成分1')
@@ -687,21 +687,21 @@ X = df[features]
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 创建t-SNE模型
 tsne = TSNE(n_components=2, perplexity=30, n_iter=1000, random_state=42)
-X_tsne = tsne.***REMOVED***t_transform(X_scaled)
+X_tsne = tsne.fit_transform(X_scaled)
 
 # 可视化t-SNE结果
-plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+plt.figure(figsize=(10, 6))
 plt.scatter(X_tsne[:, 0], X_tsne[:, 1], alpha=0.5)
 plt.title('客户数据的t-SNE可视化')
 plt.show()
 
 # 如果已经有聚类结果，可以结合颜色显示
 if 'cluster' in df.columns:
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     scatter = plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=df['cluster'], cmap='viridis', alpha=0.7)
     plt.legend(*scatter.legend_elements(), title="簇")
     plt.title('带聚类标签的t-SNE可视化')
@@ -714,7 +714,7 @@ if 'cluster' in df.columns:
 
 ### 1. 内部评估指标
 
-- **轮廓系数 (Silhouette Coef***REMOVED***cient)**：衡量簇内相似度vs簇间相似度，范围 [-1, 1]，越接近1越好
+- **轮廓系数 (Silhouette Coefficient)**：衡量簇内相似度vs簇间相似度，范围 [-1, 1]，越接近1越好
 - **Calinski-Harabasz 指数**：簇间离散度与簇内离散度的比值，值越大越好
 - **Davies-Bouldin 指数**：衡量簇内平均相似度与簇间相似度的比值，值越小越好
 - **Dunn 指数**：簇间最小距离与簇内最大距离的比值，值越大越好
@@ -862,11 +862,11 @@ rfm = rfm[rfm['monetary'] > 0]
 
 # 标准化RFM指标
 scaler = StandardScaler()
-rfm_scaled = scaler.***REMOVED***t_transform(rfm)
+rfm_scaled = scaler.fit_transform(rfm)
 
 # 应用K-means聚类
 kmeans = KMeans(n_clusters=4, random_state=42)
-rfm['cluster'] = kmeans.***REMOVED***t_predict(rfm_scaled)
+rfm['cluster'] = kmeans.fit_predict(rfm_scaled)
 
 # 查看每个簇的RFM平均值
 rfm_mean = rfm.groupby('cluster').mean()
@@ -886,7 +886,7 @@ def customer_value(row):
 rfm['value_segment'] = rfm.apply(customer_value, axis=1)
 
 # 可视化RFM分布
-plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+plt.figure(figsize=(12, 8))
 plt.scatter(rfm['recency'], rfm['monetary'], c=rfm['cluster'], 
             s=rfm['frequency']*3, alpha=0.5, cmap='viridis')
 plt.xlabel('Recency (days)')
@@ -896,7 +896,7 @@ plt.colorbar(label='Cluster')
 plt.show()
 
 # 可视化每个簇的客户数量
-plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+plt.figure(figsize=(10, 6))
 rfm['cluster'].value_counts().plot(kind='bar')
 plt.title('每个簇的客户数量')
 plt.xlabel('簇')

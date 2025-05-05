@@ -28,7 +28,7 @@ pip install -e .
 
 ## 主要脚本说明
 
-- **llama_factory_***REMOVED***ne_tuning.py**：基于LLaMA-Factory进行LoRA微调的主要脚本
+- **llama_factory_fine_tuning.py**：基于LLaMA-Factory进行LoRA微调的主要脚本
 - **llama_factory_example.sh**：提供多种使用场景的示例命令
 
 ## 数据格式
@@ -61,7 +61,7 @@ LLaMA-Factory支持多种数据格式，最常用的有：
 ### 基本微调
 
 ```bash
-python llama_factory_***REMOVED***ne_tuning.py \
+python llama_factory_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-7b-hf" \
   --dataset_path "path/to/your_data.json" \
   --dataset_format "alpaca" \
@@ -74,7 +74,7 @@ python llama_factory_***REMOVED***ne_tuning.py \
 ### 使用量化训练大模型
 
 ```bash
-python llama_factory_***REMOVED***ne_tuning.py \
+python llama_factory_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-13b-hf" \
   --dataset_path "path/to/your_data.json" \
   --dataset_format "alpaca" \
@@ -91,7 +91,7 @@ python llama_factory_***REMOVED***ne_tuning.py \
 微调完成后，可以将LoRA权重合并到原始模型中：
 
 ```bash
-python llama_factory_***REMOVED***ne_tuning.py \
+python llama_factory_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-7b-hf" \
   --dataset_path "path/to/your_data.json" \
   --output_dir "./llama-factory-output" \

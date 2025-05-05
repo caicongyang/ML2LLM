@@ -40,7 +40,7 @@ python data/generate_mock_data.py
 
 ## 3. 配置系统
 
-根据需要修改 `con***REMOVED***g.py` 文件中的配置：
+根据需要修改 `config.py` 文件中的配置：
 
 ```python
 # 数据路径
@@ -147,7 +147,7 @@ python recommend.py --user_id 123
 A: 对于大规模数据集，建议使用数据抽样、增量训练策略，或考虑分布式训练。
 
 **Q: 模型训练很慢怎么办？**
-A: 尝试减少嵌入维度、简化网络结构，或使用 `Simpli***REMOVED***edNCF` 模型替代完整的 `NCFModel`。
+A: 尝试减少嵌入维度、简化网络结构，或使用 `SimplifiedNCF` 模型替代完整的 `NCFModel`。
 
 **Q: 推荐结果不够多样化怎么办？**
 A: 在 `recommend.py` 中集成多样性策略，如结合内容相似度与协同过滤，或添加随机因素。

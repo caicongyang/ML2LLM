@@ -53,7 +53,7 @@
    - 输出范围：(0, 1)
    - 用途：二分类问题的输出层
 
-2. **ReLU (Recti***REMOVED***ed Linear Unit)**：$f(z) = \max(0, z)$
+2. **ReLU (Rectified Linear Unit)**：$f(z) = \max(0, z)$
    - 特点：计算高效，缓解梯度消失问题
    - 用途：隐藏层的常用激活函数
 
@@ -239,7 +239,7 @@ model.compile(
 )
 
 # 训练模型
-model.***REMOVED***t(
+model.fit(
     x_train, y_train,
     epochs=10,
     batch_size=32,

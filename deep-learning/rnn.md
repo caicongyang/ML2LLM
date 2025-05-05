@@ -85,7 +85,7 @@ class SimpleRNN(nn.Module):
         self.hidden_size = hidden_size
         
         # RNN层
-        self.rnn = nn.RNN(input_size, hidden_size, batch_***REMOVED***rst=True)
+        self.rnn = nn.RNN(input_size, hidden_size, batch_first=True)
         
         # 输出层
         self.fc = nn.Linear(hidden_size, output_size)
@@ -118,7 +118,7 @@ class LSTMModel(nn.Module):
         
         # LSTM层
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, 
-                          batch_***REMOVED***rst=True)
+                          batch_first=True)
         
         # 输出层
         self.fc = nn.Linear(hidden_size, output_size)
@@ -150,7 +150,7 @@ class BiLSTM(nn.Module):
         
         # 双向LSTM
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, 
-                          batch_***REMOVED***rst=True, bidirectional=True)
+                          batch_first=True, bidirectional=True)
         
         # 输出层 (注意：因为是双向，所以hidden_size需要乘以2)
         self.fc = nn.Linear(hidden_size * 2, output_size)
@@ -176,7 +176,7 @@ class SentimentAnalyzer(nn.Module):
     def __init__(self, vocab_size, embedding_dim, hidden_size):
         super(SentimentAnalyzer, self).__init__()
         self.embedding = nn.Embedding(vocab_size, embedding_dim)
-        self.lstm = nn.LSTM(embedding_dim, hidden_size, batch_***REMOVED***rst=True)
+        self.lstm = nn.LSTM(embedding_dim, hidden_size, batch_first=True)
         self.fc = nn.Linear(hidden_size, 1)
         self.sigmoid = nn.Sigmoid()
         
@@ -251,7 +251,7 @@ class Decoder(nn.Module):
 class TimeSeriesPredictor(nn.Module):
     def __init__(self, input_size, hidden_size, output_size, num_layers=2):
         super(TimeSeriesPredictor, self).__init__()
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_***REMOVED***rst=True)
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
         self.fc = nn.Linear(hidden_size, output_size)
         
     def forward(self, x):
@@ -337,7 +337,7 @@ class Attention(nn.Module):
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 
 # 评估函数
-def evaluate_classi***REMOVED***cation(model, test_loader, device):
+def evaluate_classification(model, test_loader, device):
     model.eval()
     all_preds = []
     all_labels = []
@@ -410,7 +410,7 @@ def evaluate_time_series(model, test_data, scaler=None):
 # 文本处理示例
 def preprocess_text(texts, max_len=100):
     tokenizer = Tokenizer()
-    tokenizer.***REMOVED***t_on_texts(texts)
+    tokenizer.fit_on_texts(texts)
     sequences = tokenizer.texts_to_sequences(texts)
     padded_sequences = pad_sequences(sequences, maxlen=max_len, padding='post')
     return padded_sequences, tokenizer
@@ -468,7 +468,7 @@ def train_model(model, train_loader, val_loader, criterion, optimizer,
 3. **部署与集成**
 ```python
 # 模型保存
-def save_production_model(model, tokenizer, con***REMOVED***g, path='production_model'):
+def save_production_model(model, tokenizer, config, path='production_model'):
     os.makedirs(path, exist_ok=True)
     
     # 保存模型
@@ -478,11 +478,11 @@ def save_production_model(model, tokenizer, con***REMOVED***g, path='production_
     with open(os.path.join(path, 'tokenizer.pkl'), 'wb') as f:
         pickle.dump(tokenizer, f)
     
-    with open(os.path.join(path, 'con***REMOVED***g.json'), 'w') as f:
-        json.dump(con***REMOVED***g, f)
+    with open(os.path.join(path, 'config.json'), 'w') as f:
+        json.dump(config, f)
     
     # 导出为ONNX格式（可选，便于在不同平台上使用）
-    dummy_input = torch.zeros(1, con***REMOVED***g['max_seq_length'], 
+    dummy_input = torch.zeros(1, config['max_seq_length'], 
                            dtype=torch.long)
     torch.onnx.export(model, dummy_input, 
                     os.path.join(path, 'model.onnx'))

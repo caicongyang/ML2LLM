@@ -124,12 +124,12 @@ X = df[features]
 
 # 标准化数据
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 应用因子分析
 n_factors = 2  # 因子数量
 factor_analysis = FactorAnalysis(n_components=n_factors, random_state=42)
-X_fa = factor_analysis.***REMOVED***t_transform(X_scaled)
+X_fa = factor_analysis.fit_transform(X_scaled)
 
 # 查看因子负荷量
 loadings = factor_analysis.components_.T
@@ -227,8 +227,8 @@ public class TSNEExample {
 
 ```java
 import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator;
-import org.deeplearning4j.nn.conf.MultiLayerCon***REMOVED***guration;
-import org.deeplearning4j.nn.conf.NeuralNetCon***REMOVED***guration;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -239,7 +239,7 @@ import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
-import org.nd4j.linalg.learning.con***REMOVED***g.Adam;
+import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 import java.util.Collections;
@@ -263,7 +263,7 @@ public class AutoencoderExample {
         DataSetIterator iterator = new ListDataSetIterator(listDs, batchSize);
         
         // 构建自编码器
-        MultiLayerCon***REMOVED***guration conf = new NeuralNetCon***REMOVED***guration.Builder()
+        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
             .seed(12345)
             .weightInit(WeightInit.XAVIER)
             .updater(new Adam(0.01))
@@ -300,12 +300,12 @@ public class AutoencoderExample {
         // 训练模型
         for (int i = 0; i < epochs; i++) {
             iterator.reset();
-            model.***REMOVED***t(iterator);
+            model.fit(iterator);
         }
         
         // 提取编码器部分
         MultiLayerNetwork encoder = new MultiLayerNetwork(
-                new NeuralNetCon***REMOVED***guration.Builder()
+                new NeuralNetConfiguration.Builder()
                         .seed(12345)
                         .weightInit(WeightInit.XAVIER)
                         .updater(new Adam(0.01))
@@ -373,17 +373,17 @@ X = df[features]
 
 # 标准化数据
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 应用UMAP降维
 reducer = umap.UMAP(n_neighbors=15, min_dist=0.1, n_components=2, random_state=42)
-embedding = reducer.***REMOVED***t_transform(X_scaled)
+embedding = reducer.fit_transform(X_scaled)
 
 # 创建结果DataFrame
 umap_df = pd.DataFrame(embedding, columns=['UMAP1', 'UMAP2'])
 
 # 可视化结果
-plt.***REMOVED***gure(***REMOVED***gsize=(10, 8))
+plt.figure(figsize=(10, 8))
 plt.scatter(umap_df['UMAP1'], umap_df['UMAP2'], alpha=0.7)
 plt.title('UMAP降维可视化')
 plt.xlabel('UMAP1')
@@ -412,9 +412,9 @@ plt.show()
 ```java
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.***REMOVED***lters.Filter;
-import weka.***REMOVED***lters.unsupervised.attribute.Normalize;
-import weka.***REMOVED***lters.unsupervised.attribute.Standardize;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.Normalize;
+import weka.filters.unsupervised.attribute.Standardize;
 
 public class FeatureScalingExample {
     public static void main(String[] args) throws Exception {
@@ -462,8 +462,8 @@ public class FeatureScalingExample {
 ```java
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
-import weka.***REMOVED***lters.Filter;
-import weka.***REMOVED***lters.unsupervised.attribute.MathExpression;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.MathExpression;
 
 public class NonlinearTransformExample {
     public static void main(String[] args) throws Exception {

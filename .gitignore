@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL ***REMOVED***les
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -27,7 +27,7 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-#  Usually these ***REMOVED***les are written by a python script from a template
+#  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
@@ -79,38 +79,38 @@ target/
 .ipynb_checkpoints
 
 # IPython
-pro***REMOVED***le_default/
-ipython_con***REMOVED***g.py
+profile_default/
+ipython_config.py
 
 # pyenv
-#   For a library or package, you might want to ignore these ***REMOVED***les since the code is
+#   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
 # .python-version
 
 # pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pip***REMOVED***le.lock in version control.
-#   However, in case of collaboration, if having platform-speci***REMOVED***c dependencies or dependencies
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
 #   having no cross-platform support, pipenv may install dependencies that don't work, or not
 #   install all needed dependencies.
-#Pip***REMOVED***le.lock
+#Pipfile.lock
 
 # UV
-#   Similar to Pip***REMOVED***le.lock, it is generally recommended to include uv.lock in version control.
+#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
 #uv.lock
 
 # poetry
-#   Similar to Pip***REMOVED***le.lock, it is generally recommended to include poetry.lock in version control.
+#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-***REMOVED***le-to-version-control
+#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
 #poetry.lock
 
 # pdm
-#   Similar to Pip***REMOVED***le.lock, it is generally recommended to include pdm.lock in version control.
+#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
 #pdm.lock
-#   pdm stores project-wide con***REMOVED***gurations in .pdm.toml, but it is recommended to not include it
+#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
 #   in version control.
 #   https://pdm.fming.dev/latest/usage/project/#working-with-version-control
 .pdm.toml
@@ -124,7 +124,7 @@ __pypackages__/
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed ***REMOVED***les
+# SageMath parsed files
 *.sage.py
 
 # Environments
@@ -161,25 +161,33 @@ dmypy.json
 cython_debug/
 
 # PyCharm
-#  JetBrains speci***REMOVED***c template is maintained in a separate JetBrains.gitignore that can
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this ***REMOVED***le.  For a more nuclear
+#  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
 # Ruff stuff:
 .ruff_cache/
 
-# PyPI con***REMOVED***guration ***REMOVED***le
+# PyPI configuration file
 .pypirc
 
 deep-learning/auto-vision/data 
 
 LLM/bert/models
 
+# 忽略环境变量文件
+.env
+**/.env
+**/env.local
+**/env.development.local
+**/env.test.local
+**/env.production.local
 
-
-
+# 但不忽略示例文件
+!env.example
+!**/env.example
 
 .DS_Store
 *.DS_Store

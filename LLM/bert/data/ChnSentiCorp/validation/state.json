@@ -1,10 +1,10 @@
 {
-  "_data_***REMOVED***les": [
+  "_data_files": [
     {
-      "***REMOVED***lename": "dataset.arrow"
+      "filename": "dataset.arrow"
     }
   ],
-  "_***REMOVED***ngerprint": "c663a3386ba3ca75",
+  "_fingerprint": "c663a3386ba3ca75",
   "_format_columns": null,
   "_format_kwargs": {},
   "_format_type": null,

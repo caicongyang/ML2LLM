@@ -31,10 +31,10 @@ python upload_to_modelscope.py \
 - `--access_token`: 魔塔社区 API 令牌
 - `--model_id`: (可选) 模型ID，格式为 'username/model-name'，若不指定，将使用登录用户名与model_name组合
 - `--private`: (可选) 设置仓库为私有
-- `--model_type`: (可选) 模型类型，可选 "nlp", "cv", "audio", "multi-modal", "scienti***REMOVED***c"，默认为 "nlp"
+- `--model_type`: (可选) 模型类型，可选 "nlp", "cv", "audio", "multi-modal", "scientific"，默认为 "nlp"
 - `--model_task`: (可选) 模型任务类型，如 'text-generation'，默认为 'text-generation'
 - `--model_description`: (可选) 模型描述，默认为 "基于LoRA微调并合并后的模型"
-- `--model_tags`: (可选) 模型标签，以逗号分隔，默认为 "lora,llm,***REMOVED***ne-tuned"
+- `--model_tags`: (可选) 模型标签，以逗号分隔，默认为 "lora,llm,fine-tuned"
 - `--commit_message`: (可选) 提交信息，默认为 "上传合并后的LoRA模型"
 
 ### 创建私有仓库
@@ -63,7 +63,7 @@ python upload_to_modelscope.py \
    MODEL_TYPE="nlp"  # 模型类型
    MODEL_TASK="text-generation"  # 模型任务
    MODEL_DESCRIPTION="这是一个基于LoRA微调并合并后的语言模型"  # 模型描述
-   MODEL_TAGS="lora,llm,***REMOVED***ne-tuned"  # 模型标签
+   MODEL_TAGS="lora,llm,fine-tuned"  # 模型标签
    ```
 
 2. 运行脚本:
@@ -102,5 +102,5 @@ print(result)
 
 1. 魔塔社区需要指定更详细的模型类型和任务信息
 2. 魔塔社区使用不同的API访问方式
-3. 魔塔社区需要con***REMOVED***guration.json配置文件（脚本会自动创建）
+3. 魔塔社区需要configuration.json配置文件（脚本会自动创建）
 4. 访问模型的URL格式为 `https://modelscope.cn/models/username/model-name` 

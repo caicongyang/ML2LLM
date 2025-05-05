@@ -18,7 +18,7 @@
 ### 基本使用
 
 ```bash
-***REMOVED***
+python upload_to_huggingface.py \
   --model_path "./exported_model" \
   --hf_model_name "your-username/your-model-name" \
   --hf_token "your_huggingface_token"
@@ -37,7 +37,7 @@
 如果您想将模型上传到私有仓库:
 
 ```bash
-***REMOVED***
+python upload_to_huggingface.py \
   --model_path "./exported_model" \
   --hf_model_name "your-username/your-model-name" \
   --hf_token "your_huggingface_token" \

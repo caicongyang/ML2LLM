@@ -90,10 +90,10 @@ void backpropagate(double loss) {
 // Java中的性能调优循环
 while (performanceMetric > targetThreshold) {
     // 识别瓶颈
-    PerformanceResult pro***REMOVED***le = pro***REMOVED***lingTool.analyze();
+    PerformanceResult profile = profilingTool.analyze();
     
     // 基于分析结果调整参数
-    adjustParameters(pro***REMOVED***le.getRecommendations());
+    adjustParameters(profile.getRecommendations());
     
     // 重新评估性能
     performanceMetric = measurePerformance();
@@ -262,7 +262,7 @@ class MomentumOptimizer {
 
 // Adam优化器 - 类似于复杂的自适应系统
 class AdamOptimizer {
-    private double[] ***REMOVED***rstMoment;  // 梯度的移动平均
+    private double[] firstMoment;  // 梯度的移动平均
     private double[] secondMoment; // 梯度平方的移动平均
     
     void optimize(double[] parameters, double[] gradients) {
@@ -271,7 +271,7 @@ class AdamOptimizer {
         
         // 为每个参数计算自适应学习率并更新
         for (int i = 0; i < parameters.length; i++) {
-            double adaptiveLR = calculateAdaptiveLR(***REMOVED***rstMoment[i], secondMoment[i]);
+            double adaptiveLR = calculateAdaptiveLR(firstMoment[i], secondMoment[i]);
             parameters[i] -= adaptiveLR;
         }
     }
@@ -416,7 +416,7 @@ Java类比：参数调整策略。
 
 ```java
 // 学习率查找器 - 类似于自动参数调优
-double ***REMOVED***ndOptimalLearningRate(Model model, Data trainingData, 
+double findOptimalLearningRate(Model model, Data trainingData, 
                               double minLR, double maxLR, int steps) {
     // 保存原始模型权重
     double[] originalWeights = model.copyWeights();
@@ -451,7 +451,7 @@ double ***REMOVED***ndOptimalLearningRate(Model model, Data trainingData,
     model.setWeights(originalWeights);
     
     // 找到损失下降最陡的点对应的学习率
-    return ***REMOVED***ndSteepestDecent(learningRates, losses);
+    return findSteepestDecent(learningRates, losses);
 }
 ```
 
@@ -475,7 +475,7 @@ class DistributedTrainer {
         CompletableFuture<Map<String, double[]>>[] futures = new CompletableFuture[workers.size()];
         
         for (int i = 0; i < workers.size(); i++) {
-            ***REMOVED***nal int workerIndex = i;
+            final int workerIndex = i;
             futures[i] = CompletableFuture.supplyAsync(() -> {
                 return workers.get(workerIndex).computeGradients(dataShards.get(workerIndex));
             });
@@ -545,7 +545,7 @@ Java类比：自动化配置调优。
 ```java
 // 网格搜索 - 类似于穷举测试
 class GridSearch {
-    void ***REMOVED***ndBestParameters(Model modelPrototype, Data trainingData, Data validationData) {
+    void findBestParameters(Model modelPrototype, Data trainingData, Data validationData) {
         Map<String, List<Object>> hyperparamSpace = new HashMap<>();
         hyperparamSpace.put("learningRate", Arrays.asList(0.001, 0.01, 0.1));
         hyperparamSpace.put("batchSize", Arrays.asList(32, 64, 128));
@@ -560,7 +560,7 @@ class GridSearch {
         for (Map<String, Object> params : allCombinations) {
             // 使用当前参数创建模型
             Model model = modelPrototype.clone();
-            model.con***REMOVED***gure(params);
+            model.configure(params);
             
             // 训练模型
             model.train(trainingData);

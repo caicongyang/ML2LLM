@@ -25,7 +25,7 @@ product-recommendation-system/
 ├── models/                 # 模型定义
 ├── training/               # 训练脚本
 ├── utils/                  # 工具函数
-├── con***REMOVED***g.py               # 配置文件
+├── config.py               # 配置文件
 ├── recommend.py            # 推荐API
 ├── requirements.txt        # 项目依赖
 └── README.md               # 项目说明

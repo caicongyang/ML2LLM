@@ -11,7 +11,7 @@ import logging
 from huggingface_hub import HfApi, create_repo, login
 
 # 设置日志
-logging.basicCon***REMOVED***g(
+logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )

@@ -26,7 +26,7 @@ def get_cifar10_datasets(data_dir=None, val_split=0.2, augment=True):
     """
     # 如果未指定数据目录，则使用auto-vision/data
     if data_dir is None:
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         data_dir = os.path.join(base_dir, 'data')
     
     # 确保数据目录存在
@@ -161,7 +161,7 @@ def get_cifar10_loaders(batch_size=128, augment=True, val_split=0.2, num_workers
     """
     # 如果未指定数据目录，则使用auto-vision/data
     if data_dir is None:
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         data_dir = os.path.join(base_dir, 'data')
     
     # 获取数据集
@@ -194,7 +194,7 @@ if __name__ == "__main__":
     print(f"类别列表: {dataset_info['classes']}")
     
     # 获取默认的数据目录
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__***REMOVED***le__)))
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     data_dir = os.path.join(base_dir, 'data')
     
     # 加载数据集

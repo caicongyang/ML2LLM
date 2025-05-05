@@ -221,10 +221,10 @@ def train_gan():
                 fake_images = fake_images.view(-1, 1, 28, 28)
                 # 显示或保存图像
                 grid = torchvision.utils.make_grid(fake_images, nrow=4, normalize=True)
-                plt.***REMOVED***gure(***REMOVED***gsize=(8, 8))
+                plt.figure(figsize=(8, 8))
                 plt.imshow(grid.cpu().numpy().transpose((1, 2, 0)))
                 plt.axis('off')
-                plt.save***REMOVED***g(f'generated_images_epoch_{epoch+1}.png')
+                plt.savefig(f'generated_images_epoch_{epoch+1}.png')
                 plt.close()
 
 # 执行训练

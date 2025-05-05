@@ -291,11 +291,11 @@ def extract_features(autoencoder, data):
     return features
 
 # 使用提取的特征进行分类
-def train_classi***REMOVED***er_with_autoencoder_features(autoencoder, X_train, y_train):
+def train_classifier_with_autoencoder_features(autoencoder, X_train, y_train):
     features = extract_features(autoencoder, X_train)
-    classi***REMOVED***er = LogisticRegression()
-    classi***REMOVED***er.***REMOVED***t(features.numpy(), y_train)
-    return classi***REMOVED***er
+    classifier = LogisticRegression()
+    classifier.fit(features.numpy(), y_train)
+    return classifier
 ```
 
 ### 5. 图像生成和操作
@@ -456,16 +456,16 @@ def calculate_kl_divergence(model, data_loader):
 Fréchet始创距离(FID)分数衡量生成图像分布与真实图像分布之间的相似性。
 
 ```python
-# 这需要pytorch-***REMOVED***d包
-from pytorch_***REMOVED***d import ***REMOVED***d_score
+# 这需要pytorch-fid包
+from pytorch_fid import fid_score
 
-def calculate_***REMOVED***d(real_images_path, generated_images_path):
-    ***REMOVED***d_value = ***REMOVED***d_score.calculate_***REMOVED***d_given_paths(
+def calculate_fid(real_images_path, generated_images_path):
+    fid_value = fid_score.calculate_fid_given_paths(
         [real_images_path, generated_images_path], 
         batch_size=50, 
         device='cuda'
     )
-    return ***REMOVED***d_value
+    return fid_value
 ```
 
 ### 4. 分类准确率 (针对特征学习)
@@ -479,7 +479,7 @@ def evaluate_features(autoencoder, X_test, y_test):
     
     # 训练简单分类器
     clf = LogisticRegression()
-    clf.***REMOVED***t(features, y_test)
+    clf.fit(features, y_test)
     
     # 评估分类器
     accuracy = clf.score(features, y_test)
@@ -559,19 +559,19 @@ public class AutoencoderInference {
 DeepLearning4J (DL4J)是一个流行的Java深度学习库，可用于直接在Java中实现自编码器。
 
 ```java
-import org.deeplearning4j.nn.conf.MultiLayerCon***REMOVED***guration;
-import org.deeplearning4j.nn.conf.NeuralNetCon***REMOVED***guration;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
-import org.nd4j.linalg.learning.con***REMOVED***g.Adam;
+import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 public class DL4JAutoencoder {
     public static MultiLayerNetwork buildAutoencoder(int inputDim, int encodingDim) {
-        MultiLayerCon***REMOVED***guration conf = new NeuralNetCon***REMOVED***guration.Builder()
+        MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
             .seed(123)
             .updater(new Adam(1e-3))
             .weightInit(WeightInit.XAVIER)

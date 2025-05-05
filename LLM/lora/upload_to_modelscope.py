@@ -25,7 +25,7 @@ except ImportError:
     sys.exit(1)
 
 # 设置日志
-logging.basicCon***REMOVED***g(
+logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
@@ -96,7 +96,7 @@ def parse_args():
     parser.add_argument(
         "--model_tags",
         type=str,
-        default="lora,llm,***REMOVED***ne-tuned",
+        default="lora,llm,fine-tuned",
         help="模型标签，以逗号分隔"
     )
     parser.add_argument(
@@ -106,14 +106,14 @@ def parse_args():
         help="提交信息"
     )
     parser.add_argument(
-        "--con***REMOVED***guration_***REMOVED***le",
+        "--configuration_file",
         type=str,
         default=None,
         help="自定义配置文件路径，不提供则自动生成"
     )
     return parser.parse_args()
 
-def create_con***REMOVED***guration(args, model_path):
+def create_configuration(args, model_path):
     """创建模型的配置文件"""
     # 解析model_type参数
     if '/' in args.model_type:
@@ -125,7 +125,7 @@ def create_con***REMOVED***guration(args, model_path):
         task_name = "text-generation" if model_category == "nlp" else None
     
     # 创建基础配置
-    con***REMOVED***g = {
+    config = {
         "task": task_name,
         "framework": "pytorch",
         "model": {
@@ -138,25 +138,25 @@ def create_con***REMOVED***guration(args, model_path):
     }
     
     # 检查是否存在配置文件
-    con***REMOVED***g_path = os.path.join(model_path, ModelFile.CONFIGURATION)
-    if os.path.exists(con***REMOVED***g_path):
-        logger.info(f"发现现有配置文件: {con***REMOVED***g_path}")
+    config_path = os.path.join(model_path, ModelFile.CONFIGURATION)
+    if os.path.exists(config_path):
+        logger.info(f"发现现有配置文件: {config_path}")
         try:
-            with open(con***REMOVED***g_path, 'r', encoding='utf-8') as f:
-                existing_con***REMOVED***g = json.load(f)
+            with open(config_path, 'r', encoding='utf-8') as f:
+                existing_config = json.load(f)
                 # 合并配置
-                con***REMOVED***g.update(existing_con***REMOVED***g)
+                config.update(existing_config)
                 logger.info("已合并现有配置文件")
         except Exception as e:
             logger.warning(f"读取现有配置文件失败: {e}")
     
     # 如果提供了自定义配置文件，使用它覆盖
-    if args.con***REMOVED***guration_***REMOVED***le and os.path.exists(args.con***REMOVED***guration_***REMOVED***le):
+    if args.configuration_file and os.path.exists(args.configuration_file):
         try:
-            with open(args.con***REMOVED***guration_***REMOVED***le, 'r', encoding='utf-8') as f:
-                custom_con***REMOVED***g = json.load(f)
-                con***REMOVED***g.update(custom_con***REMOVED***g)
-                logger.info(f"已合并自定义配置文件: {args.con***REMOVED***guration_***REMOVED***le}")
+            with open(args.configuration_file, 'r', encoding='utf-8') as f:
+                custom_config = json.load(f)
+                config.update(custom_config)
+                logger.info(f"已合并自定义配置文件: {args.configuration_file}")
         except Exception as e:
             logger.warning(f"读取自定义配置文件失败: {e}")
     
@@ -195,7 +195,7 @@ print(response)
 ```
 """
     
-    return con***REMOVED***g, readme_content
+    return config, readme_content
 
 def get_license_enum(license_str):
     """将许可证字符串转换为Licenses枚举值"""
@@ -223,9 +223,9 @@ def upload_to_modelscope(
     model_type: str = "nlp/text-generation",
     license_str: str = "Apache-2.0",
     model_description: str = "基于LoRA微调并合并后的模型",
-    model_tags: str = "lora,llm,***REMOVED***ne-tuned",
+    model_tags: str = "lora,llm,fine-tuned",
     commit_message: str = "上传合并后的LoRA模型",
-    con***REMOVED***guration_***REMOVED***le: str = None
+    configuration_file: str = None
 ) -> None:
     """
     将合并后的模型上传到魔塔社区
@@ -243,7 +243,7 @@ def upload_to_modelscope(
         model_description: 模型描述
         model_tags: 模型标签，以逗号分隔
         commit_message: 提交信息
-        con***REMOVED***guration_***REMOVED***le: 自定义配置文件路径
+        configuration_file: 自定义配置文件路径
     """
     # 检查模型路径是否存在
     if not os.path.exists(model_path):
@@ -255,7 +255,7 @@ def upload_to_modelscope(
     args.model_name = model_name
     args.model_type = model_type
     args.model_description = model_description
-    args.con***REMOVED***guration_***REMOVED***le = con***REMOVED***guration_***REMOVED***le
+    args.configuration_file = configuration_file
     
     # 获取或创建模型ID
     if not model_id:
@@ -268,13 +268,13 @@ def upload_to_modelscope(
     logger.info(f"正在准备上传模型到: {model_id}")
     
     # 创建配置文件和README
-    con***REMOVED***g, readme_content = create_con***REMOVED***guration(args, model_path)
+    config, readme_content = create_configuration(args, model_path)
     
     # 写入配置文件到模型目录
-    con***REMOVED***g_path = os.path.join(model_path, ModelFile.CONFIGURATION)
-    with open(con***REMOVED***g_path, 'w', encoding='utf-8') as f:
-        json.dump(con***REMOVED***g, f, ensure_ascii=False, indent=2)
-    logger.info(f"已创建配置文件: {con***REMOVED***g_path}")
+    config_path = os.path.join(model_path, ModelFile.CONFIGURATION)
+    with open(config_path, 'w', encoding='utf-8') as f:
+        json.dump(config, f, ensure_ascii=False, indent=2)
+    logger.info(f"已创建配置文件: {config_path}")
     
     # 写入README文件
     readme_path = os.path.join(model_path, ModelFile.README)
@@ -369,7 +369,7 @@ def main():
         model_description=args.model_description,
         model_tags=args.model_tags,
         commit_message=args.commit_message,
-        con***REMOVED***guration_***REMOVED***le=args.con***REMOVED***guration_***REMOVED***le
+        configuration_file=args.configuration_file
     )
 
 if __name__ == "__main__":

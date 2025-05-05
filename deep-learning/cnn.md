@@ -94,18 +94,18 @@
 Deeplearning4j是JVM上最流行的深度学习库：
 
 ```java
-import org.deeplearning4j.nn.conf.MultiLayerCon***REMOVED***guration;
-import org.deeplearning4j.nn.conf.NeuralNetCon***REMOVED***guration;
+import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.inputs.InputType;
 import org.deeplearning4j.nn.conf.layers.*;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.nd4j.linalg.activations.Activation;
-import org.nd4j.linalg.learning.con***REMOVED***g.Adam;
+import org.nd4j.linalg.learning.config.Adam;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 // 定义CNN模型配置
-MultiLayerCon***REMOVED***guration conf = new NeuralNetCon***REMOVED***guration.Builder()
+MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
     .seed(123)
     .updater(new Adam(0.001))
     .weightInit(WeightInit.XAVIER)
@@ -162,9 +162,9 @@ import ai.djl.nn.SequentialBlock;
 import ai.djl.nn.convolutional.Conv2d;
 import ai.djl.nn.core.Linear;
 import ai.djl.nn.pooling.Pool;
-import ai.djl.training.DefaultTrainingCon***REMOVED***g;
+import ai.djl.training.DefaultTrainingConfig;
 import ai.djl.training.Trainer;
-import ai.djl.training.TrainingCon***REMOVED***g;
+import ai.djl.training.TrainingConfig;
 import ai.djl.training.loss.Loss;
 import ai.djl.training.optimizer.Optimizer;
 import ai.djl.training.optimizer.learningrate.LearningRateTracker;
@@ -193,13 +193,13 @@ Model model = Model.newInstance("cnn");
 model.setBlock(block);
 
 // 配置训练参数
-TrainingCon***REMOVED***g con***REMOVED***g = new DefaultTrainingCon***REMOVED***g(Loss.softmaxCrossEntropyLoss())
-    .optOptimizer(Optimizer.adam().optLearningRateTracker(LearningRateTracker.***REMOVED***xedLearningRate(0.001f)).build())
+TrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
+    .optOptimizer(Optimizer.adam().optLearningRateTracker(LearningRateTracker.fixedLearningRate(0.001f)).build())
     .optDevices(devices)
     .addEvaluator(new Accuracy());
 
 // 创建训练器
-Trainer trainer = model.newTrainer(con***REMOVED***g);
+Trainer trainer = model.newTrainer(config);
 ```
 
 ### 使用TensorFlow Java API
@@ -250,10 +250,10 @@ try (Graph graph = new Graph()) {
 
 ```java
 // 使用预训练的CNN模型进行图像分类
-public class ImageClassi***REMOVED***er {
+public class ImageClassifier {
     private MultiLayerNetwork model;
     
-    public ImageClassi***REMOVED***er(String modelPath) throws IOException {
+    public ImageClassifier(String modelPath) throws IOException {
         // 加载预训练模型
         this.model = ModelSerializer.restoreMultiLayerNetwork(new File(modelPath));
     }
@@ -290,7 +290,7 @@ public class ImageClassi***REMOVED***er {
 public class ObjectDetector {
     private ComputationGraph model; // DL4J中的复杂网络结构
     
-    public List<Detection> detectObjects(BufferedImage image, double con***REMOVED***denceThreshold) {
+    public List<Detection> detectObjects(BufferedImage image, double confidenceThreshold) {
         // 预处理图像
         INDArray input = preprocessImage(image);
         
@@ -298,7 +298,7 @@ public class ObjectDetector {
         INDArray[] outputs = model.output(input);
         
         // 解析检测结果（边界框、类别、置信度）
-        return parseDetections(outputs, con***REMOVED***denceThreshold);
+        return parseDetections(outputs, confidenceThreshold);
     }
     
     // ...
@@ -332,7 +332,7 @@ public class ImageSegmenter {
 在Java中使用预训练的CNN模型进行迁移学习：
 
 ```java
-import org.deeplearning4j.nn.transferlearning.FineTuneCon***REMOVED***guration;
+import org.deeplearning4j.nn.transferlearning.FineTuneConfiguration;
 import org.deeplearning4j.nn.transferlearning.TransferLearning;
 import org.deeplearning4j.zoo.ZooModel;
 import org.deeplearning4j.zoo.model.VGG16;
@@ -342,14 +342,14 @@ ZooModel zooModel = VGG16.builder().build();
 ComputationGraph vgg16 = (ComputationGraph) zooModel.initPretrained();
 
 // 配置迁移学习
-FineTuneCon***REMOVED***guration ***REMOVED***neTuneConf = new FineTuneCon***REMOVED***guration.Builder()
+FineTuneConfiguration fineTuneConf = new FineTuneConfiguration.Builder()
     .updater(new Adam(0.0001))
     .seed(123)
     .build();
 
 // 创建新模型，冻结预训练层，添加自定义输出层
 ComputationGraph transferModel = new TransferLearning.GraphBuilder(vgg16)
-    .***REMOVED***neTuneCon***REMOVED***guration(***REMOVED***neTuneConf)
+    .fineTuneConfiguration(fineTuneConf)
     .setFeatureExtractor("fc2") // 冻结此层之前的所有层
     .removeVertexAndConnections("predictions") // 移除原始输出层
     .addLayer("predictions", new OutputLayer.Builder()
@@ -394,7 +394,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 
 # 训练模型
-model.***REMOVED***t(x_train, y_train, epochs=5, batch_size=64, validation_data=(x_val, y_val))
+model.fit(x_train, y_train, epochs=5, batch_size=64, validation_data=(x_val, y_val))
 ```
 
 ### Java与Python CNN对比
@@ -460,7 +460,7 @@ public class DocumentProcessor {
         BufferedImage document = cropImage(image, bounds);
         
         // 2. 分析文档布局，识别文本区域
-        List<Rectangle> textRegions = layoutAnalyzer.***REMOVED***ndTextRegions(document);
+        List<Rectangle> textRegions = layoutAnalyzer.findTextRegions(document);
         
         // 3. 对每个文本区域进行OCR
         StringBuilder result = new StringBuilder();
@@ -521,7 +521,7 @@ public class ContentModerator {
 
 ```java
 // 高效图像处理示例
-public class Ef***REMOVED***cientImageProcessor {
+public class EfficientImageProcessor {
     // 使用线程池并行处理图像批次
     private ExecutorService executor = Executors.newFixedThreadPool(
         Runtime.getRuntime().availableProcessors()

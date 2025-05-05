@@ -30,7 +30,7 @@ from tqdm import tqdm
 from torchvision.utils import make_grid
 
 
-def train_classi***REMOVED***er(model, train_loader, val_loader, args):
+def train_classifier(model, train_loader, val_loader, args):
     """
     训练分类模型
     
@@ -222,7 +222,7 @@ def train_classi***REMOVED***er(model, train_loader, val_loader, args):
         'optimizer_state_dict': optimizer.state_dict(),  # 优化器状态
         'val_acc': val_acc,  # 最后一轮的验证准确率
         'val_loss': val_loss,  # 最后一轮的验证损失
-    }, os.path.join(save_dir, f"{model_name}_***REMOVED***nal.pth"))  # 保存路径
+    }, os.path.join(save_dir, f"{model_name}_final.pth"))  # 保存路径
     
     # 关闭TensorBoard写入器
     writer.close()
@@ -505,7 +505,7 @@ def train_autoencoder(model, train_loader, val_loader, args):
         'model_state_dict': model.state_dict(),  # 模型参数
         'optimizer_state_dict': optimizer.state_dict(),  # 优化器状态
         'val_loss': val_loss,  # 最后一轮的验证损失
-    }, os.path.join(save_dir, f"{model_name}_***REMOVED***nal.pth"))  # 保存路径
+    }, os.path.join(save_dir, f"{model_name}_final.pth"))  # 保存路径
     
     # 关闭TensorBoard写入器
     writer.close()
@@ -596,7 +596,7 @@ if __name__ == "__main__":
     # 设置模型名称
     args["model_name"] = model.name
     # 调用分类器训练函数
-    train_classi***REMOVED***er(model, train_loader, val_loader, args)
+    train_classifier(model, train_loader, val_loader, args)
     
     # 测试自编码器训练
     print("\n测试自编码器训练:")

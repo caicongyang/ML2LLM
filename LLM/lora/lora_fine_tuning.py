@@ -9,7 +9,7 @@ LoRA是一种高效的微调方法，通过学习模型权重的低秩分解矩�
 而不是微调整个模型，从而显著减少了可训练参数的数量。
 
 用法:
-    python lora_***REMOVED***ne_tuning.py --model_name_or_path <基础模型> --dataset_path <数据集路径> 
+    python lora_fine_tuning.py --model_name_or_path <基础模型> --dataset_path <数据集路径> 
     --output_dir <输出目录> --lora_rank <秩> --lora_alpha <alpha值> --lora_dropout <dropout值>
 
 作者: ML2LLM 团队
@@ -30,7 +30,7 @@ from transformers import (
 )
 from peft import (
     get_peft_model,
-    LoraCon***REMOVED***g,
+    LoraConfig,
     TaskType,
     prepare_model_for_kbit_training
 )
@@ -120,9 +120,9 @@ def prepare_dataset(tokenizer, args):
     if os.path.exists(args.dataset_path):
         dataset_format = args.dataset_path.split(".")[-1]
         if dataset_format == "json":
-            dataset = load_dataset("json", data_***REMOVED***les=args.dataset_path)
+            dataset = load_dataset("json", data_files=args.dataset_path)
         elif dataset_format == "csv":
-            dataset = load_dataset("csv", data_***REMOVED***les=args.dataset_path)
+            dataset = load_dataset("csv", data_files=args.dataset_path)
         else:
             raise ValueError(f"不支持的数据集格式: {dataset_format}")
     else:
@@ -190,9 +190,9 @@ def main():
     if args.use_4bit:
         print("正在加载4位精度模型...")
         from bitsandbytes.nn import Linear4bit
-        from transformers import BitsAndBytesCon***REMOVED***g
+        from transformers import BitsAndBytesConfig
         
-        model_kwargs["quantization_con***REMOVED***g"] = BitsAndBytesCon***REMOVED***g(
+        model_kwargs["quantization_config"] = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch.float16,
             bnb_4bit_use_double_quant=True,
@@ -235,7 +235,7 @@ def main():
             args.target_modules = ["query", "key", "value", "attention.output.dense", "output.dense"]
     
     # 配置LoRA
-    peft_con***REMOVED***g = LoraCon***REMOVED***g(
+    peft_config = LoraConfig(
         task_type=TaskType.CAUSAL_LM,
         inference_mode=False,
         r=args.lora_rank,
@@ -245,7 +245,7 @@ def main():
     )
     
     # 将LoRA适配器添加到模型中
-    model = get_peft_model(model, peft_con***REMOVED***g)
+    model = get_peft_model(model, peft_config)
     
     # 打印可训练参数信息
     model.print_trainable_parameters()
@@ -290,14 +290,14 @@ def main():
     trainer.train()
     
     # 保存最终模型和分词器
-    ***REMOVED***nal_output_dir = os.path.join(args.output_dir, "***REMOVED***nal")
-    os.makedirs(***REMOVED***nal_output_dir, exist_ok=True)
+    final_output_dir = os.path.join(args.output_dir, "final")
+    os.makedirs(final_output_dir, exist_ok=True)
     
     # 保存LoRA模型和分词器
-    model.save_pretrained(***REMOVED***nal_output_dir)
-    tokenizer.save_pretrained(***REMOVED***nal_output_dir)
+    model.save_pretrained(final_output_dir)
+    tokenizer.save_pretrained(final_output_dir)
     
-    print(f"LoRA微调完成。模型已保存到 {***REMOVED***nal_output_dir}")
+    print(f"LoRA微调完成。模型已保存到 {final_output_dir}")
 
 if __name__ == "__main__":
     main() 

@@ -27,7 +27,7 @@ from sklearn.ensemble import IsolationForest   # 用于异常值检测
 
 # 获取脚本所在目录的绝对路径，用于确保在任何目录运行脚本时都能找到正确的文件
 # 这解决了相对路径在不同环境中可能导致的文件不存在问题
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # 设置matplotlib的中文字体支持，确保图表中的中文正确显示
 # 按照优先级尝试不同的字体，适应不同操作系统环境
@@ -42,14 +42,14 @@ def get_absolute_path(relative_path):
     该函数确保无论从哪里运行脚本，都能正确找到所需的文件。
     
     参数:
-    relative_path (str): 相对路径，如'data/***REMOVED***le.csv'
+    relative_path (str): 相对路径，如'data/file.csv'
     
     返回:
-    str: 完整的绝对路径，如'/home/user/project/data/***REMOVED***le.csv'
+    str: 完整的绝对路径，如'/home/user/project/data/file.csv'
     """
     return os.path.join(SCRIPT_DIR, relative_path)
 
-def load_data(***REMOVED***le_path='data/credit_card_applications.csv'):
+def load_data(file_path='data/credit_card_applications.csv'):
     """
     加载信用卡审批数据集
     
@@ -57,16 +57,16 @@ def load_data(***REMOVED***le_path='data/credit_card_applications.csv'):
     如果文件不存在或读取过程中出现错误，将返回None并打印错误信息。
     
     参数:
-    ***REMOVED***le_path (str): 数据文件路径，默认为'data/credit_card_applications.csv'
+    file_path (str): 数据文件路径，默认为'data/credit_card_applications.csv'
     
     返回:
     pandas.DataFrame: 加载的数据集，如果加载失败则返回None
     """
     # 转换为绝对路径，确保在任何环境下都能找到文件
-    abs_***REMOVED***le_path = get_absolute_path(***REMOVED***le_path)
+    abs_file_path = get_absolute_path(file_path)
     try:
         # 尝试读取CSV文件到DataFrame
-        data = pd.read_csv(abs_***REMOVED***le_path)
+        data = pd.read_csv(abs_file_path)
         print(f"成功加载数据，形状为: {data.shape}")
         return data
     except Exception as e:
@@ -115,14 +115,14 @@ def handle_missing_values(data):
     if numeric_columns:
         print("使用中位数填充数值特征的缺失值...")
         imputer = SimpleImputer(strategy='median')  # 创建中位数填充器
-        processed_data[numeric_columns] = imputer.***REMOVED***t_transform(processed_data[numeric_columns])
+        processed_data[numeric_columns] = imputer.fit_transform(processed_data[numeric_columns])
     
     # 对分类特征使用众数填充
     # 众数是分类数据中出现最频繁的值，是分类特征的合理估计
     if categorical_columns:
         print("使用众数填充分类特征的缺失值...")
         imputer = SimpleImputer(strategy='most_frequent')  # 创建众数填充器
-        processed_data[categorical_columns] = imputer.***REMOVED***t_transform(processed_data[categorical_columns])
+        processed_data[categorical_columns] = imputer.fit_transform(processed_data[categorical_columns])
     
     # 验证填充效果，确保没有遗漏的缺失值
     remaining_missing = processed_data.isnull().sum().sum()
@@ -171,7 +171,7 @@ def detect_and_handle_outliers(data, contamination=0.05):
         contamination=contamination,  # 预期的异常值比例
         random_state=42              # 固定随机种子，确保结果可重现
     )
-    outliers = iso_forest.***REMOVED***t_predict(processed_data[numeric_columns])
+    outliers = iso_forest.fit_predict(processed_data[numeric_columns])
     
     # 标记异常值: 1=正常, -1=异常（这是隔离森林的输出格式）
     processed_data['is_outlier'] = outliers
@@ -181,12 +181,12 @@ def detect_and_handle_outliers(data, contamination=0.05):
     print(f"检测到 {outlier_count} 个异常样本 (约 {outlier_count/len(processed_data)*100:.2f}%)")
     
     # 可视化异常值分布，帮助理解异常检测的结果
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     sns.countplot(x='is_outlier', data=processed_data)
     plt.title('异常值分布')
     plt.xlabel('是否为异常值 (1=正常, -1=异常)')
     plt.ylabel('数量')
-    plt.save***REMOVED***g(get_absolute_path('data/outliers_distribution.png'))
+    plt.savefig(get_absolute_path('data/outliers_distribution.png'))
     print(f"异常值分布图已保存到 {get_absolute_path('data/outliers_distribution.png')}")
     
     # 处理异常值 - 方法选择
@@ -256,7 +256,7 @@ def encode_categorical_features(data):
     # 标签编码将类别值转换为0到n-1之间的整数
     for col in categorical_columns:
         encoder = LabelEncoder()
-        processed_data[col] = encoder.***REMOVED***t_transform(processed_data[col])
+        processed_data[col] = encoder.fit_transform(processed_data[col])
         encoders[col] = encoder
         
         # 打印编码映射，这有助于理解和解释转换后的数据
@@ -308,7 +308,7 @@ def normalize_features(data):
     # 使用StandardScaler进行Z-score标准化
     # Z-score = (X - mean) / std，使特征均值为0，标准差为1
     scaler = StandardScaler()
-    processed_data[numeric_columns] = scaler.***REMOVED***t_transform(processed_data[numeric_columns])
+    processed_data[numeric_columns] = scaler.fit_transform(processed_data[numeric_columns])
     
     # 显示标准化后的统计信息，验证是否成功（均值应接近0，标准差应接近1）
     print("标准化后的数值特征统计信息:")
@@ -357,7 +357,7 @@ def check_data_quality(data, original_data):
     
     # 可视化比较原始数据和处理后数据的目标变量分布
     # 这有助于直观地判断预处理是否影响了类别平衡
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 6))
+    plt.figure(figsize=(12, 6))
     
     # 绘制原始数据的目标分布
     plt.subplot(1, 2, 1)
@@ -379,10 +379,10 @@ def check_data_quality(data, original_data):
     os.makedirs(output_dir, exist_ok=True)
     
     # 保存比较图表
-    plt.save***REMOVED***g(get_absolute_path('data/target_distribution_comparison.png'))
+    plt.savefig(get_absolute_path('data/target_distribution_comparison.png'))
     print(f"目标分布比较图已保存到 {get_absolute_path('data/target_distribution_comparison.png')}")
 
-def preprocess_data(input_***REMOVED***le='data/credit_card_applications.csv', output_***REMOVED***le='data/processed_data.csv'):
+def preprocess_data(input_file='data/credit_card_applications.csv', output_file='data/processed_data.csv'):
     """
     数据预处理主函数：协调整个预处理流程
     
@@ -399,8 +399,8 @@ def preprocess_data(input_***REMOVED***le='data/credit_card_applications.csv', o
     从而生成高质量、适合机器学习算法使用的数据集。
     
     参数:
-    input_***REMOVED***le (str): 输入数据文件路径，默认为'data/credit_card_applications.csv'
-    output_***REMOVED***le (str): 输出数据文件路径，默认为'data/processed_data.csv'
+    input_file (str): 输入数据文件路径，默认为'data/credit_card_applications.csv'
+    output_file (str): 输出数据文件路径，默认为'data/processed_data.csv'
     
     返回:
     tuple: (处理后的数据集, 编码器字典, 标准化器)，这些对象可用于处理将来的预测数据
@@ -408,7 +408,7 @@ def preprocess_data(input_***REMOVED***le='data/credit_card_applications.csv', o
     print("开始数据预处理过程...")
     
     # 加载原始数据
-    original_data = load_data(input_***REMOVED***le)
+    original_data = load_data(input_file)
     if original_data is None:
         return None, None, None
     
@@ -435,13 +435,13 @@ def preprocess_data(input_***REMOVED***le='data/credit_card_applications.csv', o
     # 保存处理后的数据
     if data is not None:
         # 确保输出目录存在
-        output_dir = os.path.dirname(get_absolute_path(output_***REMOVED***le))
+        output_dir = os.path.dirname(get_absolute_path(output_file))
         os.makedirs(output_dir, exist_ok=True)
         
         # 保存处理后的数据到CSV文件
-        abs_output_***REMOVED***le = get_absolute_path(output_***REMOVED***le)
-        data.to_csv(abs_output_***REMOVED***le, index=False)
-        print(f"处理后的数据已保存到 {abs_output_***REMOVED***le}")
+        abs_output_file = get_absolute_path(output_file)
+        data.to_csv(abs_output_file, index=False)
+        print(f"处理后的数据已保存到 {abs_output_file}")
     
     print("数据预处理完成！")
     # 返回处理后的数据以及转换器，供后续步骤使用

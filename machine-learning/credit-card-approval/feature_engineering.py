@@ -22,7 +22,7 @@ import numpy as np           # 用于科学计算和数组操作
 import matplotlib.pyplot as plt  # 用于数据可视化
 import seaborn as sns        # 用于高级数据可视化
 from sklearn.feature_selection import SelectKBest, f_classif, mutual_info_classif, RFE  # 特征选择工具
-from sklearn.ensemble import RandomForestClassi***REMOVED***er  # 用于特征重要性评估和RFE
+from sklearn.ensemble import RandomForestClassifier  # 用于特征重要性评估和RFE
 from sklearn.decomposition import PCA               # 用于降维
 from sklearn.preprocessing import PolynomialFeatures # 用于创建多项式特征
 from sklearn.pipeline import Pipeline               # 用于构建特征处理流水线
@@ -35,7 +35,7 @@ plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题，避免�
 
 # 获取脚本所在目录的绝对路径，用于确保在任何目录运行脚本时都能找到正确的文件
 # 这解决了相对路径在不同环境中可能导致的文件不存在问题
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__***REMOVED***le__))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def get_absolute_path(relative_path):
     """
@@ -45,14 +45,14 @@ def get_absolute_path(relative_path):
     该函数确保无论从哪里运行脚本，都能正确找到所需的文件。
     
     参数:
-    relative_path (str): 相对路径，如'data/***REMOVED***le.csv'
+    relative_path (str): 相对路径，如'data/file.csv'
     
     返回:
-    str: 完整的绝对路径，如'/home/user/project/data/***REMOVED***le.csv'
+    str: 完整的绝对路径，如'/home/user/project/data/file.csv'
     """
     return os.path.join(SCRIPT_DIR, relative_path)
 
-def load_processed_data(***REMOVED***le_path='data/processed_data.csv'):
+def load_processed_data(file_path='data/processed_data.csv'):
     """
     加载预处理后的信用卡审批数据集
     
@@ -61,16 +61,16 @@ def load_processed_data(***REMOVED***le_path='data/processed_data.csv'):
     确保我们使用的是已清洗和标准化的数据。
     
     参数:
-    ***REMOVED***le_path (str): 数据文件路径，默认为'data/processed_data.csv'
+    file_path (str): 数据文件路径，默认为'data/processed_data.csv'
     
     返回:
     pandas.DataFrame: 加载的预处理数据集，如果加载失败则返回None
     """
     # 转换为绝对路径，确保在任何环境下都能找到文件
-    abs_***REMOVED***le_path = get_absolute_path(***REMOVED***le_path)
+    abs_file_path = get_absolute_path(file_path)
     try:
         # 尝试读取CSV文件到DataFrame
-        data = pd.read_csv(abs_***REMOVED***le_path)
+        data = pd.read_csv(abs_file_path)
         print(f"成功加载预处理后的数据，形状为: {data.shape}")
         return data
     except Exception as e:
@@ -109,11 +109,11 @@ def analyze_feature_importance(data):
     # ========== 方法1：随机森林特征重要性 ==========
     # 随机森林是一种集成学习方法，可评估特征在决策中的重要性
     print("使用随机森林估计特征重要性...")
-    rf = RandomForestClassi***REMOVED***er(
+    rf = RandomForestClassifier(
         n_estimators=100,   # 使用100棵决策树构成森林
         random_state=42     # 设置随机种子，确保结果可重现
     )
-    rf.***REMOVED***t(X, y)  # 训练随机森林模型
+    rf.fit(X, y)  # 训练随机森林模型
     
     # 获取特征重要性分数
     # 对于分类问题，这通常基于基尼不纯度或信息增益的平均减少
@@ -133,11 +133,11 @@ def analyze_feature_importance(data):
     
     # 可视化随机森林特征重要性
     # 使用条形图直观展示各特征的重要性
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+    plt.figure(figsize=(12, 8))
     sns.barplot(x='Importance', y='Feature', data=feature_importance_df)
     plt.title('特征重要性 (随机森林)')
     plt.tight_layout()
-    plt.save***REMOVED***g(get_absolute_path('data/feature_importance_rf.png'))
+    plt.savefig(get_absolute_path('data/feature_importance_rf.png'))
     print("特征重要性图已保存到 data/feature_importance_rf.png")
     
     # ========== 方法2：ANOVA F值 ==========
@@ -147,7 +147,7 @@ def analyze_feature_importance(data):
         f_classif,      # ANOVA F值作为评分函数
         k='all'         # 评估所有特征而不进行筛选
     )
-    selector.***REMOVED***t(X, y)  # 计算每个特征的F统计量
+    selector.fit(X, y)  # 计算每个特征的F统计量
     
     # 获取F值和p值
     # F值越高，特征与目标的相关性越强
@@ -165,11 +165,11 @@ def analyze_feature_importance(data):
     print(anova_scores)
     
     # 可视化ANOVA F值
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+    plt.figure(figsize=(12, 8))
     sns.barplot(x='F_Score', y='Feature', data=anova_scores)
     plt.title('特征重要性 (ANOVA F-value)')
     plt.tight_layout()
-    plt.save***REMOVED***g(get_absolute_path('data/feature_importance_anova.png'))
+    plt.savefig(get_absolute_path('data/feature_importance_anova.png'))
     print("ANOVA F-value特征重要性图已保存到 data/feature_importance_anova.png")
     
     # ========== 方法3：互信息 ==========
@@ -180,7 +180,7 @@ def analyze_feature_importance(data):
         mutual_info_classif,    # 互信息作为评分函数
         k='all'                 # 评估所有特征
     )
-    selector.***REMOVED***t(X, y)  # 计算每个特征的互信息分数
+    selector.fit(X, y)  # 计算每个特征的互信息分数
     
     # 获取互信息分数
     # 分数越高，特征包含的关于目标的信息越多
@@ -196,11 +196,11 @@ def analyze_feature_importance(data):
     print(mi_scores)
     
     # 可视化互信息分数
-    plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+    plt.figure(figsize=(12, 8))
     sns.barplot(x='MI_Score', y='Feature', data=mi_scores)
     plt.title('特征重要性 (互信息)')
     plt.tight_layout()
-    plt.save***REMOVED***g(get_absolute_path('data/feature_importance_mi.png'))
+    plt.savefig(get_absolute_path('data/feature_importance_mi.png'))
     print("互信息特征重要性图已保存到 data/feature_importance_mi.png")
     
     # 返回包含所有重要性分数的字典，供后续特征选择使用
@@ -283,7 +283,7 @@ def select_features(data, importance_scores, method='random_forest', threshold=0
     elif method == 'rfe':
         # RFE是一种包装器方法，它通过反复训练模型、评估特征重要性并移除最不重要的特征
         print("使用递归特征消除 (RFE)...")
-        estimator = RandomForestClassi***REMOVED***er(n_estimators=100, random_state=42)
+        estimator = RandomForestClassifier(n_estimators=100, random_state=42)
         
         if k is None:
             # 如果未指定k，默认选择一半的特征
@@ -292,7 +292,7 @@ def select_features(data, importance_scores, method='random_forest', threshold=0
         # 创建RFE对象，指定要选择的特征数量
         rfe = RFE(estimator=estimator, n_features_to_select=k)
         # 应用RFE，拟合数据
-        rfe.***REMOVED***t(X, y)
+        rfe.fit(X, y)
         
         # 获取选定的特征（RFE为每个特征创建一个boolean掩码）
         selected_mask = rfe.support_
@@ -343,7 +343,7 @@ def create_polynomial_features(data, selected_features, degree=2):
     # degree=2表示创建至多2阶的特征（如x^2, x*y）
     # include_bias=False表示不添加截距项（常数项1）
     poly = PolynomialFeatures(degree=degree, include_bias=False)
-    poly_features = poly.***REMOVED***t_transform(X_subset)
+    poly_features = poly.fit_transform(X_subset)
     
     # 获取生成的多项式特征数量（排除原始特征）
     # 多项式转换后的数据包含原始特征和新生成的多项式特征
@@ -423,7 +423,7 @@ def apply_pca(data, n_components=None, variance_threshold=0.95):
         # 当没有明确指定主成分数量时，使用方差阈值自动确定
         # 首先创建一个不限制组件数量的PCA对象
         pca = PCA()
-        pca.***REMOVED***t(X)
+        pca.fit(X)
         
         # 计算累积解释方差比
         # explained_variance_ratio_包含每个主成分解释的方差比例
@@ -439,7 +439,7 @@ def apply_pca(data, n_components=None, variance_threshold=0.95):
     # ========== 应用PCA转换 ==========
     # 使用确定的主成分数量创建PCA对象并执行转换
     pca = PCA(n_components=n_components)
-    pca.***REMOVED***t(X)
+    pca.fit(X)
     X_pca = pca.transform(X)
     
     # 创建主成分列名（PC1, PC2, ...）
@@ -453,7 +453,7 @@ def apply_pca(data, n_components=None, variance_threshold=0.95):
     
     # ========== 可视化解释的方差比例 ==========
     # 创建图表显示每个主成分解释的方差比例和累积方差比例
-    plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     
     # 条形图显示每个主成分解释的方差比例
     plt.bar(
@@ -477,7 +477,7 @@ def apply_pca(data, n_components=None, variance_threshold=0.95):
     plt.text(1, variance_threshold+0.02, f'{variance_threshold*100:.1f}% 方差阈值', color='g')
     
     plt.grid(True)
-    plt.save***REMOVED***g(get_absolute_path('data/pca_explained_variance.png'))
+    plt.savefig(get_absolute_path('data/pca_explained_variance.png'))
     print("PCA解释的方差比例图已保存到 data/pca_explained_variance.png")
     
     # 输出降维结果的统计信息
@@ -486,7 +486,7 @@ def apply_pca(data, n_components=None, variance_threshold=0.95):
     
     return pca_df, pca
 
-def engineer_features(data, output_***REMOVED***le='data/engineered_data.csv'):
+def engineer_features(data, output_file='data/engineered_data.csv'):
     """
     特征工程主函数：协调整个特征工程流程
     
@@ -502,7 +502,7 @@ def engineer_features(data, output_***REMOVED***le='data/engineered_data.csv'):
     
     参数:
     data (pandas.DataFrame): 输入数据集，包含特征和目标变量
-    output_***REMOVED***le (str): 输出数据文件路径，默认为'data/engineered_data.csv'
+    output_file (str): 输出数据文件路径，默认为'data/engineered_data.csv'
     
     返回:
     tuple: (工程处理后的数据集, 选择的特征列表, 特征转换器元组)
@@ -544,18 +544,18 @@ def engineer_features(data, output_***REMOVED***le='data/engineered_data.csv'):
     # ========== 阶段4: 降维 - PCA ==========
     # 应用PCA降维，减少特征数量但保留大部分信息
     # 这对于处理多项式特征创建后的高维数据特别有用
-    ***REMOVED***nal_data, pca_transformer = apply_pca(
+    final_data, pca_transformer = apply_pca(
         enhanced_data, 
         variance_threshold=0.95  # 保留95%的方差
     )
     
     # ========== 阶段5: 保存结果 ==========
     # 保存工程处理后的数据和转换器，供后续建模使用
-    if ***REMOVED***nal_data is not None:
+    if final_data is not None:
         # 转换为绝对路径并保存数据
-        abs_output_***REMOVED***le = get_absolute_path(output_***REMOVED***le)
-        ***REMOVED***nal_data.to_csv(abs_output_***REMOVED***le, index=False)
-        print(f"特征工程处理后的数据已保存到 {output_***REMOVED***le}")
+        abs_output_file = get_absolute_path(output_file)
+        final_data.to_csv(abs_output_file, index=False)
+        print(f"特征工程处理后的数据已保存到 {output_file}")
         
         # 保存特征转换器，用于将来处理新数据
         # 包括：选定的特征列表、多项式转换器和PCA转换器
@@ -570,7 +570,7 @@ def engineer_features(data, output_***REMOVED***le='data/engineered_data.csv'):
     print("特征工程完成！")
     
     # 返回处理后的数据和转换器，供后续建模步骤使用
-    return ***REMOVED***nal_data, selected_features, (poly_transformer, pca_transformer)
+    return final_data, selected_features, (poly_transformer, pca_transformer)
 
 def main():
     """

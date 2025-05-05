@@ -18,8 +18,8 @@ LoRA权重合并脚本
 import os
 import argparse
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesCon***REMOVED***g
-from peft import PeftModel, PeftCon***REMOVED***g
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from peft import PeftModel, PeftConfig
 
 def parse_args():
     """解析命令行参数"""
@@ -67,13 +67,13 @@ def main():
     # 加载LoRA配置以显示信息
     print_section("加载LoRA配置")
     try:
-        peft_con***REMOVED***g = PeftCon***REMOVED***g.from_pretrained(args.lora_adapter_path)
+        peft_config = PeftConfig.from_pretrained(args.lora_adapter_path)
         print(f"LoRA配置: ")
-        print(f"  - 任务类型: {peft_con***REMOVED***g.task_type}")
-        print(f"  - 目标模块: {peft_con***REMOVED***g.target_modules}")
-        print(f"  - LoRA秩 (r): {peft_con***REMOVED***g.r}")
-        print(f"  - LoRA Alpha: {peft_con***REMOVED***g.lora_alpha}")
-        print(f"  - LoRA Dropout: {peft_con***REMOVED***g.lora_dropout}")
+        print(f"  - 任务类型: {peft_config.task_type}")
+        print(f"  - 目标模块: {peft_config.target_modules}")
+        print(f"  - LoRA秩 (r): {peft_config.r}")
+        print(f"  - LoRA Alpha: {peft_config.lora_alpha}")
+        print(f"  - LoRA Dropout: {peft_config.lora_dropout}")
     except Exception as e:
         print(f"读取LoRA配置时出错: {e}")
         print("将继续尝试加载适配器...")
@@ -98,7 +98,7 @@ def main():
         
     if args.load_in_4bit:
         print("使用4位精度加载基础模型...")
-        model_kwargs["quantization_con***REMOVED***g"] = BitsAndBytesCon***REMOVED***g(
+        model_kwargs["quantization_config"] = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch.float16,
             bnb_4bit_use_double_quant=True,

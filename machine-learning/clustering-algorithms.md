@@ -105,17 +105,17 @@ X = data[['feature1', 'feature2']]  # 选择用于聚类的特征
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 确定最佳的K值（使用肘部法则）
 wcss = []  # 组内平方和
 for i in range(1, 11):
     kmeans = KMeans(n_clusters=i, init='k-means++', max_iter=300, n_init=10, random_state=42)
-    kmeans.***REMOVED***t(X_scaled)
+    kmeans.fit(X_scaled)
     wcss.append(kmeans.inertia_)
 
 # 绘制肘部图
-plt.***REMOVED***gure(***REMOVED***gsize=(10, 6))
+plt.figure(figsize=(10, 6))
 plt.plot(range(1, 11), wcss, marker='o', linestyle='-')
 plt.title('使用肘部法则寻找最佳K值')
 plt.xlabel('簇的数量')
@@ -125,13 +125,13 @@ plt.show()
 # 根据肘部图选择K值（假设为3）
 k = 3
 kmeans = KMeans(n_clusters=k, init='k-means++', max_iter=300, n_init=10, random_state=42)
-clusters = kmeans.***REMOVED***t_predict(X_scaled)
+clusters = kmeans.fit_predict(X_scaled)
 
 # 添加簇标签到原始数据
 data['cluster'] = clusters
 
 # 可视化结果（如果是2D数据）
-plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+plt.figure(figsize=(12, 8))
 for cluster in range(k):
     plt.scatter(
         data[data['cluster'] == cluster]['feature1'],
@@ -288,10 +288,10 @@ X = data[['feature1', 'feature2']]  # 选择用于聚类的特征
 
 # 数据标准化
 scaler = StandardScaler()
-X_scaled = scaler.***REMOVED***t_transform(X)
+X_scaled = scaler.fit_transform(X)
 
 # 创建并绘制树状图
-plt.***REMOVED***gure(***REMOVED***gsize=(16, 10))
+plt.figure(figsize=(16, 10))
 linked = linkage(X_scaled, method='ward')  # 使用Ward方法
 dendrogram(linked, 
            orientation='top',
@@ -305,13 +305,13 @@ plt.show()
 # 执行层次聚类
 n_clusters = 3  # 根据树状图选择合适的簇数
 model = AgglomerativeClustering(n_clusters=n_clusters, linkage='ward')
-clusters = model.***REMOVED***t_predict(X_scaled)
+clusters = model.fit_predict(X_scaled)
 
 # 添加簇标签到原始数据
 data['cluster'] = clusters
 
 # 可视化结果（如果是2D数据）
-plt.***REMOVED***gure(***REMOVED***gsize=(12, 8))
+plt.figure(figsize=(12, 8))
 for cluster in range(n_clusters):
     plt.scatter(
         data[data['cluster'] == cluster]['feature1'],
@@ -365,7 +365,7 @@ for cluster in range(n_clusters):
 
 如何评估聚类结果的质量？以下是一些常用的内部评估指标：
 
-### 1. 轮廓系数 (Silhouette Coef***REMOVED***cient)
+### 1. 轮廓系数 (Silhouette Coefficient)
 
 衡量簇内相似度vs簇间相似度，范围[-1, 1]：
 - 接近1表示样本与自己的簇高度匹配，与其他簇分离良好
@@ -471,7 +471,7 @@ image_array_sample = shuffle(image_array, random_state=42)[:n_samples]
 
 # 应用K-means
 n_colors = 8  # 我们想要的颜色数量
-kmeans = KMeans(n_clusters=n_colors, random_state=42).***REMOVED***t(image_array_sample)
+kmeans = KMeans(n_clusters=n_colors, random_state=42).fit(image_array_sample)
 
 # 将学习到的颜色中心应用于完整图像
 labels = kmeans.predict(image_array)
@@ -481,7 +481,7 @@ centers = kmeans.cluster_centers_
 segmented_image = centers[labels].reshape(h, w, d)
 
 # 显示结果
-plt.***REMOVED***gure(***REMOVED***gsize=(16, 8))
+plt.figure(figsize=(16, 8))
 plt.subplot(121)
 plt.imshow(image)
 plt.title('原始图像')

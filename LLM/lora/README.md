@@ -31,10 +31,10 @@ torch>=2.0.1
 
 ### 基本用法
 
-主脚本`lora_***REMOVED***ne_tuning.py`处理整个微调过程：
+主脚本`lora_fine_tuning.py`处理整个微调过程：
 
 ```bash
-python lora_***REMOVED***ne_tuning.py \
+python lora_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-7b-hf" \
   --dataset_path "your_dataset.json" \
   --output_dir "./lora-llama-2-output" \
@@ -49,7 +49,7 @@ python lora_***REMOVED***ne_tuning.py \
 对于较大的模型，可以使用4位量化来减少显存使用：
 
 ```bash
-python lora_***REMOVED***ne_tuning.py \
+python lora_fine_tuning.py \
   --model_name_or_path "meta-llama/Llama-2-13b-hf" \
   --dataset_path "your_dataset.json" \
   --output_dir "./lora-llama-2-13b-output" \
@@ -89,7 +89,7 @@ JSON格式示例：
 - `--use_8bit` / `--use_4bit`：启用8位或4位量化
 - `--gradient_accumulation_steps`：累积的更新步数（默认：8）
 
-运行`python lora_***REMOVED***ne_tuning.py --help`获取完整的参数列表。
+运行`python lora_fine_tuning.py --help`获取完整的参数列表。
 
 ## 使用微调后的模型
 
@@ -104,7 +104,7 @@ base_model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
 tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
 
 # 加载LoRA适配器
-model = PeftModel.from_pretrained(base_model, "./lora-llama-2-output/***REMOVED***nal")
+model = PeftModel.from_pretrained(base_model, "./lora-llama-2-output/final")
 
 # 生成文本
 input_text = "您的提示文本"
