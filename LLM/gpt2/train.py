@@ -9,9 +9,9 @@ from torch.utils.data import DataLoader  # 导入PyTorch的数据加载器类
 dataset = MyDataset()  # 创建数据集对象
 
 # 加载预训练的分词器，用于文本编码
-tokenizer = AutoTokenizer.from_pretrained(r"E:\llm\gpt2-chinese\models--uer--gpt2-chinese-cluecorpussmall\snapshots\c2c0249d8a2731f269414cc3b22dff021f8e07a3")
+tokenizer = AutoTokenizer.from_pretrained("uer/gpt2-chinese-cluecorpussmall")
 # 加载预训练的模型，用于语言模型任务
-model = AutoModelForCausalLM.from_pretrained(r"E:\llm\gpt2-chinese\models--uer--gpt2-chinese-cluecorpussmall\snapshots\c2c0249d8a2731f269414cc3b22dff021f8e07a3")
+model = AutoModelForCausalLM.from_pretrained("uer/gpt2-chinese-cluecorpussmall")
 
 # 定义一个函数，用于将文本数据转换为模型所需的格式
 def collate_fn(data):

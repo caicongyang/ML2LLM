@@ -2,8 +2,8 @@
 from transformers import BertTokenizer,GPT2LMHeadModel,TextGenerationPipeline
 
 # 加载模型和分词器
-model = GPT2LMHeadModel.from_pretrained(r"E:\llm\gpt2-chinese\models--uer--gpt2-chinese-poem\snapshots\6335c88ef6a3362dcdf2e988577b7bafeda6052b")
-tokenizer = BertTokenizer.from_pretrained(r"E:\llm\gpt2-chinese\models--uer--gpt2-chinese-poem\snapshots\6335c88ef6a3362dcdf2e988577b7bafeda6052b")
+model = GPT2LMHeadModel.from_pretrained("uer/gpt2-chinese-poem")
+tokenizer = BertTokenizer.from_pretrained("uer/gpt2-chinese-poem")
 print(model)
 
 #使用Pipeline调用模型

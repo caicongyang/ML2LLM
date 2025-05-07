@@ -3,8 +3,8 @@
 from transformers import BertTokenizer,GPT2LMHeadModel,TextGenerationPipeline
 
 # 加载模型和分词器
-model = GPT2LMHeadModel.from_pretrained(r"E:\llm\gpt2-chinese\models--uer--gpt2-chinese-couplet\snapshots\91b9465fb1be617f69c6f003b0bd6e6642537bec")
-tokenizer = BertTokenizer.from_pretrained(r"E:\llm\gpt2-chinese\models--uer--gpt2-chinese-couplet\snapshots\91b9465fb1be617f69c6f003b0bd6e6642537bec")
+model = GPT2LMHeadModel.from_pretrained("uer/gpt2-chinese-couplet")
+tokenizer = BertTokenizer.from_pretrained("uer/gpt2-chinese-couplet")
 print(model)
 
 #使用Pipeline调用模型

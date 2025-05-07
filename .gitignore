@@ -175,7 +175,7 @@ cython_debug/
 
 deep-learning/auto-vision/data 
 
-LLM/bert/models
+LLM/bert/model
 
 # 忽略环境变量文件
 .env
